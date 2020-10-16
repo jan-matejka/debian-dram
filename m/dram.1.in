@@ -1,0 +1,177 @@
+.\" vim: tw=72 fdm=marker cms=.\\"\ %s
+.
+.\" FRONT MATTER {{{
+.Dd Oct 30, 2020
+.Os
+.Dt DRAM 1
+.
+.Sh NAME
+.Nm dram
+.Nd literate functional tests for the CLI
+.\" FRONT MATTER }}}
+.
+.\" SYNOPSIS {{{
+.Sh SYNOPSIS
+.Nm
+. Fl h | V
+.Nm
+. Op Fl DETfinvy
+. Op Fl I Ar INDENT
+. Op Fl s Ar SHELL
+. Op Fl t Ar SUFFIX
+. Ar TEST...
+.\" SYNOPSIS }}}
+.
+.\" DESCRIPTION {{{
+.Sh DESCRIPTION
+.Nm
+is a tool for functional tests of CLI applications.
+.Pp
+.Nm
+extracts all commands from a testfile into a script,
+runs the script with a modified environment, in an empty
+directory, with standard input redirected from
+.Pa /dev/null ,
+and standard output plus standard error redirected into
+a file.  Individual commands are fenced from each other
+so their outputs are unambiguously attributable.
+.Pp
+.Nm
+then compares the actual outputs with expected ones,
+and offers their differences (as unified diffs) for merging
+into the original testfiles.
+.\" }}}
+.
+.\" OPTIONS {{{
+.Sh OPTIONS
+.Bl -tag -width xx
+. It Fl h
+Display usage information.
+. It Fl V
+Display version information.
+. It Fl D
+Do not print diffs.
+. It Fl E
+Preserve existing environment variables.
+. It Fl I Ar INDENT
+.No Number of spaces used for test code indentation Pq default: Li 2 .
+. It Fl T
+Leave behind working files.
+. It Fl f
+Abort after first failed test.
+Skip any remaining tests.
+. It Fl i
+Interactively merge changed test output.
+. It Fl n
+Answer no to all questions.
+. It Fl s Ar SHELL
+.No Shell to use for running tests Pq default: Li sh .
+. It Fl t Ar SUFFIX
+.No Extension of testfiles Pq default: Li .t .
+. It Fl v
+Show filenames with test statuses.
+. It Fl y
+Answer yes to all questions.
+.El
+.\" }}}
+.
+.\" ENVIRONMENT {{{
+.Sh ENVIRONMENT
+.Ss Variables used by Nm
+.
+.Bl -tag -width xx
+.It DRAM_DIFF
+. No Program used to generate diffs.  Defaults to Pa diff .
+.It DRAM_FAIL_FAST
+. No If set to any of Qo Li 1Yy Qc , enables Fl f .
+.It DRAM_INDENT
+String used to indent command, continuation, output, and
+exit code lines.
+.It DRAM_KEEP_ENVIRON
+. No If set to any of Qo Li 1Yy Qc , enables Fl E .
+.It DRAM_KEEP_TMPDIR
+. No If set to any of Qo Li 1Yy Qc , enables Fl T .
+.It DRAM_NODIFFS
+. No If set to any of Qo Li 1Yy Qc , enables Fl D .
+.It DRAM_PATCH
+. No Program used to apply diffs.  Defaults to Pa patch .
+.It DRAM_SHELL
+. No See Fl s .
+.It DRAM_UPDATE
+. No If set to any of Qo Li Aa Qc , enables Fl i .
+. No If set to any of Qo Li 1Yy Qc , enables Fl i No and Fl y.
+.It DRAM_TEST_SUFFIX
+. No See Fl t .
+.It DRAM_TMPDIR
+. No If set, Nm No will create working files in this directory
+. No instead of creating one under Ev TMPDIR .
+.It DRAM_VERBOSE
+. No If set to any of Qo Li 1Yy Qc , enables Fl v .
+.El
+.Pp
+Beside the above,
+.Nm
+may be influenced by environment variables used by
+.Xr diff 1 ,
+.Xr patch 1 ,
+.Xr sh 1 ,
+possibly others.
+.
+.Ss Environment of test scripts
+.
+.Nm
+runs tests with environment limited to the following
+variables and values by default.
+This behavior can be inhibited by
+.Fl E
+or
+.Ev DRAM_KEEP_ENVIRON .
+Environment variables with names starting with
+.Qq Li DRAM_
+are
+.Em always
+removed from the environment of tests.
+.
+.Bl -column Variable Value
+.It Ev COLUMNS Ta Qq Li 80
+.It Ev LANG Ta Qq Li C
+.It Ev LC_ALL Ta Qq Li C
+.It Ev LINES Ta Qq Li 20
+.It Ev PATH Ta Inherited from Nm Ns No 's environment, defaults to
+. Qq Li /usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin .
+.It Ev TMPDIR Ta Pathname of an existing, writable, empty directory.
+.It Ev TZ Ta Li UTC
+.El
+.Bl -tag -width xx
+.It Ev TESTDIR
+. No Absolute path of the directory containing the testfile.
+.It Ev TESTFILE
+. No Basename of the testfile.
+.El
+.Pp
+.\" }}}
+.
+.\" EXIT STATUS {{{
+.Sh EXIT STATUS
+.Ex -std
+.\" }}}
+
+.\" SEE ALSO {{{
+.Sh SEE ALSO
+.Xr diff 1 ,
+.Xr patch 1 ,
+.Xr sh 1 ,
+.Lk https://bitheap.org/cram .
+.\" }}}
+.
+.\" AUTHORS {{{
+.Sh AUTHORS
+.An Roman Neuhauser Aq Mt rn+dram@sigpipe.cz
+.\" AUTHORS }}}
+.
+.\" BUGS {{{
+.Sh BUGS
+No doubt plentiful.
+Please report them at
+.Lk https://todo.sr.ht/~rne/dram .
+.\" BUGS }}}

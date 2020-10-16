@@ -1,0 +1,11 @@
+{
+  "authors": ["Roman Neuhauser <rn+dram@sigpipe.cz>"]
+, "copyright": "Copyright © 2020, Roman Neuhauser"
+, "description": "Literate Functional Tests for the CLI"
+, "license": "GPL-3.0 or later"
+, "name": "dram"
+, "targetType": "executable"
+, "targetName": "dram.bin"
+, "sourcePaths": ["s"]
+, "importPaths": ["s"]
+}
