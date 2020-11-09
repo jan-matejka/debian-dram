@@ -4,52 +4,25 @@ mismatched output
 
 setup::
 
-  $ cat > testfile <<\EOF
-  >   $ printf "%s\n" a b c
-  >   a
-  >   d
-  >   c
-  > EOF
-
-
-test::
-
-  $ dram testfile
-  !
-  --- testfile
-  +++ testfile
-  @@ -1,4 +1,4 @@
-     $ printf "%s\n" a b c
-     a
-  -  d
-  +  b
-     c
-  
-  tests: 1, skipped: 0, failed: 1
-  [1]
-
-
-setup::
-
-  $ cat > testfile <<\EOF
+  $ cat > testfile-1 <<\EOF
   >   $ printf "%s\n" a b
   >   a
   >   b
-  >   c
+  >   X
   > EOF
 
 
 test::
 
-  $ dram testfile
+  $ dram testfile-1
   !
-  --- testfile
-  +++ testfile
+  --- testfile-1
+  +++ testfile-1
   @@ -1,4 +1,3 @@
      $ printf "%s\n" a b
      a
      b
-  -  c
+  -  X
   
   tests: 1, skipped: 0, failed: 1
   [1]
@@ -57,7 +30,7 @@ test::
 
 setup::
 
-  $ cat > testfile <<\EOF
+  $ cat > testfile-2 <<\EOF
   >   $ printf "%s\n" a b
   >   b
   > EOF
@@ -65,10 +38,10 @@ setup::
 
 test::
 
-  $ dram testfile
+  $ dram testfile-2
   !
-  --- testfile
-  +++ testfile
+  --- testfile-2
+  +++ testfile-2
   @@ -1,2 +1,3 @@
      $ printf "%s\n" a b
   +  a

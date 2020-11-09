@@ -4,7 +4,7 @@ handling of outputs without trainling newlines
 
 setup::
 
-  $ cat > testfile <<\EOF
+  $ cat > testfile-0 <<\EOF
   >   $ printf hello
   >   hello (no-eol)
   >   $ (exit 42)
@@ -14,7 +14,7 @@ setup::
 
 test::
 
-  $ dram testfile
+  $ dram testfile-0
   .
   
   tests: 1, skipped: 0, failed: 0
@@ -22,7 +22,7 @@ test::
 
 setup::
 
-  $ cat > testfile <<\EOF
+  $ cat > testfile-1 <<\EOF
   >   $ printf hello; (exit 42)
   >   hello (no-eol)
   >   [42]
@@ -31,7 +31,7 @@ setup::
 
 test::
 
-  $ dram testfile
+  $ dram testfile-1
   .
   
   tests: 1, skipped: 0, failed: 0

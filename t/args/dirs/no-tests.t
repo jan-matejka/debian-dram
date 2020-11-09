@@ -4,7 +4,7 @@
 
 setup::
 
-  $ cat >> testfile <<\EOF
+  $ cat > testfile <<\EOF
   >   $ echo hello
   >   goodbye
   > EOF
