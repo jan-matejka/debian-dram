@@ -17,9 +17,12 @@
 
 module dram;
 
+import core.time;
 import std.algorithm;
 import std.conv;
 import std.container.array;
+import std.datetime.stopwatch: AutoStart, StopWatch;
+import std.datetime.systime;
 import std.file;
 import std.path;
 import std.process;
@@ -28,6 +31,8 @@ import std.regex;
 import std.stdio;
 import std.string;
 import std.typecons;
+import dxml.util;
+import dxml.writer;
 
 import mdiff;
 
@@ -48,8 +53,6 @@ int main(string[] argv) // {{{
   // using environment variables only.
   auto cfg = DramConfig(environment.toAA);
 
-  cfg.setUp;
-
   try {
     // each operand is either a testfile or a directory
     // (supposedly) containing testfiles (recursively)
@@ -59,6 +62,9 @@ int main(string[] argv) // {{{
       .map!buildNormalizedPath
       .array
     ;
+
+    cfg.setUp;
+
     auto skipped = 0;
     auto failed  = 0;
     auto results = tests
@@ -66,11 +72,6 @@ int main(string[] argv) // {{{
       .cache
       // print dots, exclamation marks, etc.
       .tee!(r => cfg.report(r))
-      // tally results
-      .tee!((r) {
-        skipped += r.skip;
-        failed  += r.fail;
-      })
       // abort on first fail if given -b
       .until!(r => cfg.failFast(r))(No.openRight)
       // force evaluation, need reported results
@@ -80,14 +81,20 @@ int main(string[] argv) // {{{
 
     if (results.length < tests.length) {
       auto done = results.map!(tr => tr.testFile);
-      tests
+      results ~= tests
         .filter!(x => !done.canFind(x))
         .map!(tf => TestResult(80, tf))
         .cache
-        .tee!(r => skipped += 1)
-        .each!(r => cfg.report(r))
+        .tee!(r => cfg.report(r))
+        .array
       ;
     }
+
+    // tally results
+    results.each!((r) {
+      skipped += r.skip;
+      failed  += r.fail;
+    });
 
     if (!cfg.verbose && !results.empty)
       writeln;
@@ -104,7 +111,7 @@ int main(string[] argv) // {{{
     , failed
     );
 
-    cfg.cleanUp;
+    cfg.cleanUp(results, skipped, failed);
 
     return exit;
   } catch (FileException e) {
@@ -122,6 +129,9 @@ struct DramConfig // {{{
   bool   verbose;
   char   update = 'n';
   string extension = ".t";
+  string junitFile;
+
+  StopWatch stopWatch;
 
   string indent;
   Tuple!(
@@ -151,6 +161,9 @@ struct DramConfig // {{{
     verbose = isAnyOf("1Yy", env.get("DRAM_VERBOSE", "0"));
     update = default_("no", env.get("DRAM_UPDATE", "no"))[0];
     extension = env.get("DRAM_TEST_SUFFIX", ".t");
+    junitFile = env.get("DRAM_JUNIT_FILE", "");
+
+    stopWatch = StopWatch(AutoStart.no);
 
     indent = env.get("DRAM_INDENT", "  ");
     prompts = tuple(
@@ -195,14 +208,69 @@ struct DramConfig // {{{
 
   void setUp() // {{{
   {
+    stopWatch.start;
     tmpdir.mkdirRecurse;
   } // }}}
-  void cleanUp() // {{{
+  void cleanUp(TestResult[] results, int skipped, int failed) // {{{
   {
+    if (!junitFile.empty)
+      writeJUnitFile(results, skipped, failed);
     if (!keeptmp)
       tmpdir.rmdirRecurse;
     else
       "preserved %s".writefln(tmpdir);
+  } // }}}
+  void writeJUnitFile(TestResult[] results, int skipped, int failed) // {{{
+  // based on https://llg.cubic.org/docs/junit/
+  // deviation from Cram: omits <testsuite>'s hostname attribute
+  {
+    auto now = Clock.currTime!(ClockType.second);
+    auto suiteTime = stopWatch.peek.total!"msecs" / 1000.0;
+    auto junit = File(junitFile, "w");
+    auto orange = junit.lockingTextWriter;
+    orange.writeXMLDecl!string;
+    auto xml = xmlWriter(orange, "  ");
+    xml.openStartTag("testsuite", Newline.yes);
+    xml.writeAttr("name", "dram", Newline.yes);
+    xml.writeAttr("tests", results.length.to!string, Newline.yes);
+    xml.writeAttr("failures", failed.to!string, Newline.yes);
+    xml.writeAttr("skipped", skipped.to!string, Newline.yes);
+    xml.writeAttr("timestamp", now.toISOExtString, Newline.yes);
+    xml.writeAttr("time", suiteTime.to!string, Newline.yes);
+    xml.closeStartTag;
+    results.each!((tr) {
+      auto ttime = tr.time.total!"msecs" / 1000.0;
+      xml.openStartTag("testcase", Newline.yes);
+      xml.writeAttr("classname", encodeAttr(tr.testFile), Newline.yes);
+      xml.writeAttr("name", encodeAttr(tr.testFile.baseName), Newline.yes);
+      xml.writeAttr("time", ttime.to!string, Newline.yes);
+      if (tr.skip) {
+        xml.closeStartTag;
+        xml.openStartTag("skipped");
+        xml.closeStartTag(EmptyTag.yes);
+        xml.writeEndTag("testcase");
+      }
+      else if (tr.fail) {
+        xml.closeStartTag;
+        tr.diff.rewind;
+        auto difftext = appender!string;
+        //difftext.reserve(diff.size);
+        tr.diff
+          .byLine(Yes.keepTerminator)
+          .each!(l => difftext ~= encodeText(l))
+        ;
+        xml.openStartTag("failure", Newline.yes);
+        xml.closeStartTag;
+        xml.writeText(difftext[], Newline.yes, InsertIndent.no);
+        xml.writeEndTag("failure", Newline.yes);
+        xml.writeEndTag("testcase");
+      } else {
+        xml.closeStartTag(EmptyTag.yes);
+      }
+    });
+    xml.writeEndTag("testsuite");
+    junit.writeln;
+    junit.close;
   } // }}}
   bool failFast(TestResult r) // {{{
   {
@@ -304,6 +372,7 @@ struct DramConfig // {{{
 
 TestResult runTest(DramConfig cfg, string testFile) // {{{
 {
+  auto stopWatch = StopWatch(AutoStart.yes);
   auto p = new DramParser(cfg);
   auto asserts = p.parseFile(testFile);
 
@@ -340,7 +409,8 @@ TestResult runTest(DramConfig cfg, string testFile) // {{{
   if (exit) {
     if (exit != 80)
       std.stdio.stderr.writefln("failed to run %s", cfg.shell);
-    return TestResult(exit, testFile, twd);
+    stopWatch.stop;
+    return TestResult(exit, testFile, twd, stopWatch.peek);
   }
 
   outputFile.rewind;
@@ -359,7 +429,8 @@ TestResult runTest(DramConfig cfg, string testFile) // {{{
     diff.rewind;
   else
     diff.close;
-  return TestResult(exDiff, testFile, twd, diff);
+  stopWatch.stop;
+  return TestResult(exDiff, testFile, twd, stopWatch.peek, diff);
 } // }}}
 
 struct TestResult // {{{
@@ -367,6 +438,7 @@ struct TestResult // {{{
   int exit;
   string testFile;
   string twd;
+  Duration time;
   File diff;
   bool fail() // {{{
   {

@@ -15,6 +15,10 @@ install: dram dram.bin
 	install -m 755 dram $(DESTDIR)$(bindir)/dram
 	install -s -m 755 dram.bin $(DESTDIR)$(bindir)/dram.bin
 
+.PHONY: clean
+clean:
+	$(RM) dram dram.bin
+
 dram: s/dram.sh
 	install -m 755 $< $@
 

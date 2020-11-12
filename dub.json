@@ -8,4 +8,7 @@
 , "targetName": "dram.bin"
 , "sourcePaths": ["s"]
 , "importPaths": ["s"]
+, "dependencies": {
+    "dxml": "~>0.4.3"
+  }
 }

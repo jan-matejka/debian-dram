@@ -55,7 +55,7 @@ VERSION
   exit
 } # }}}
 
-while getopts :hVDEI:Tfins:t:vy opt "$@"; do
+while getopts :hVDEI:Tfij:ns:t:vy opt "$@"; do
   case $opt in
   h) usage 0 ;;
   V) version ;;
@@ -75,6 +75,7 @@ while getopts :hVDEI:Tfins:t:vy opt "$@"; do
   T) export DRAM_KEEP_TMPDIR=1 ;;
   f) export DRAM_FAIL_FAST=1 ;;
   i) export DRAM_UPDATE=ask ;;
+  j) export DRAM_JUNIT_FILE="$OPTARG" ;;
   n) export DRAM_UPDATE=no ;;
   s) export DRAM_SHELL="$OPTARG" ;;
   t) export DRAM_TEST_SUFFIX="$OPTARG" ;;

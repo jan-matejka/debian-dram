@@ -97,8 +97,9 @@ for Cram.
 Command Line Interface
 ++++++++++++++++++++++
 
-Dram only does short options, and does not know `-d` / `--debug`
-(use `-T` and examine the files left behind).
+* Dram only does short options.
+* There's no `-d` / `--debug` (use `-T` and examine the files left behind).
+* Dram has `-j` instead of `--xunit-file`.
 
 Testfile Syntax
 +++++++++++++++
@@ -175,8 +176,6 @@ Tests are ordered by their pathnames.  Cram runs tests
 in the order `readdir(3)` returns them.
 
 The summary line is formatted differently.
-
-No XUnit output format (so far).
 
 Whereas Cram displays the diff for each failed test
 right after running it, Dram runs (and reports on)
