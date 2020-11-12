@@ -59,7 +59,6 @@ int main(string[] argv) // {{{
       .map!buildNormalizedPath
       .array
     ;
-    auto ran     = 0;
     auto skipped = 0;
     auto failed  = 0;
     auto results = tests
@@ -69,9 +68,8 @@ int main(string[] argv) // {{{
       .tee!(r => cfg.report(r))
       // tally results
       .tee!((r) {
-        ran     += 1;
-        skipped += (r.skip);
-        failed  += (r.fail);
+        skipped += r.skip;
+        failed  += r.fail;
       })
       // abort on first fail if given -b
       .until!(r => cfg.failFast(r))(No.openRight)
@@ -79,6 +77,17 @@ int main(string[] argv) // {{{
       // before printing the newline below.
       .array
     ;
+
+    if (results.length < tests.length) {
+      auto done = results.map!(tr => tr.testFile);
+      tests
+        .filter!(x => !done.canFind(x))
+        .map!(tf => TestResult(80, tf))
+        .cache
+        .tee!(r => skipped += 1)
+        .each!(r => cfg.report(r))
+      ;
+    }
 
     if (!cfg.verbose && !results.empty)
       writeln;
@@ -91,7 +100,7 @@ int main(string[] argv) // {{{
 
     "\ntests: %d, skipped: %d, failed: %d".writefln(
       tests.length
-    , tests.length - ran + skipped
+    , skipped
     , failed
     );
 

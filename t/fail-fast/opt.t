@@ -12,10 +12,21 @@ setup::
 
 test::
 
+  $ dram -Df a b c d e
+  ..!ss
+  
+  tests: 5, skipped: 2, failed: 1
+  [1]
+
+
+test::
+
   $ dram -Dfv a b c d e
   . a
   . b
   ! c
+  s d
+  s e
   
   tests: 5, skipped: 2, failed: 1
   [1]
