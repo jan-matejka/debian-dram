@@ -127,7 +127,8 @@ struct DramConfig // {{{
   bool   keeptmp;
   bool   nodiffs;
   bool   verbose;
-  char   update = 'n';
+  bool   update;
+  bool   ask;
   string extension = ".t";
   string junitFile;
 
@@ -159,7 +160,8 @@ struct DramConfig // {{{
     keeptmp = isAnyOf("1Yy", env.get("DRAM_KEEP_TMPDIR", "0"));
     nodiffs = isAnyOf("1Yy", env.get("DRAM_NODIFFS", "0"));
     verbose = isAnyOf("1Yy", env.get("DRAM_VERBOSE", "0"));
-    update = default_("no", env.get("DRAM_UPDATE", "no"))[0];
+    update = isAnyOf("1YyAa", env.get("DRAM_UPDATE", "0"));
+    ask = isAnyOf("Aa", env.get("DRAM_UPDATE", "0"));
     extension = env.get("DRAM_TEST_SUFFIX", ".t");
     junitFile = env.get("DRAM_JUNIT_FILE", "");
 
@@ -293,12 +295,12 @@ struct DramConfig // {{{
 
     r.diff.byLine.each!writeln;
 
-    if (0 > "1AaYy".indexOf(update))
+    if (!update)
       return 1;
 
     // $DRAM_UPDATE is either "1", "[Yy]es" or "[Aa]sk"
 
-    if (update == 'a') {
+    if (ask) {
       writefln("%s failed. Apply results? [Y/n]", r.testFile);
 
       auto reply = std.stdio.stdin.readln;
