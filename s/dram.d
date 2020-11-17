@@ -676,14 +676,19 @@ struct Output // {{{
 
 int runDiff(DramConfig cfg, string test, string result, File sink) // {{{
 {
-  return spawnProcess(
-    [cfg.diffcmd, "-u", "--label", test, "--label", test, test, result]
-  , std.stdio.stdin
-  , sink
-  , std.stdio.stderr
-  , null
-  , Config.retainStdout
-  ).wait;
+  try {
+    return spawnProcess(
+      [cfg.diffcmd, "-u", "--label", test, "--label", test, test, result]
+    , std.stdio.stdin
+    , sink
+    , std.stdio.stderr
+    , null
+    , Config.retainStdout
+    ).wait;
+  } catch (ProcessException e) {
+    stderr.writefln("%s", e.msg);
+    return 1;
+  }
 } // }}}
 
 int runPatch(DramConfig cfg, string test, string patch) // {{{
