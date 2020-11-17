@@ -31,6 +31,7 @@ test::
   t1 failed. Apply results? [Y/n]
   
   tests: 1, skipped: 0, failed: 1
+  [1]
 
 
 postconditions::

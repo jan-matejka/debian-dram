@@ -30,6 +30,7 @@ test::
   +  hello
   
   tests: 1, skipped: 0, failed: 1
+  [1]
 
 
 postconditions::

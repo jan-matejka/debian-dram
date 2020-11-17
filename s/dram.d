@@ -113,7 +113,7 @@ int main(string[] argv) // {{{
 
     cfg.cleanUp(results, skipped, failed);
 
-    return exit;
+    return failed ? 1 : exit;
   } catch (FileException e) {
     stderr.writeln(e.msg);
     return 1;
@@ -409,8 +409,6 @@ TestResult runTest(DramConfig cfg, string testFile) // {{{
   // outputFile from the script and treat the test as "skipped".
   auto exit = runScript(cfg, testFile, script.name, outputFile);
   if (exit) {
-    if (exit != 80)
-      std.stdio.stderr.writefln("failed to run %s", cfg.shell);
     stopWatch.stop;
     return TestResult(exit, testFile, twd, stopWatch.peek);
   }
@@ -603,16 +601,21 @@ int runScript(DramConfig cfg, string test, string script, File outputFile) // {{
   workdir.mkdir;
   tmpdir.mkdir;
 
-  auto pid = spawnProcess(
-    [cfg.shell, script]
-  , File("/dev/null", "r")
-  , outputFile
-  , outputFile
-  , cfg.env(test, tmpdir)
-  , Config.retainStderr | Config.retainStdout | Config.newEnv
-  , workdir
-  );
-  return pid.wait;
+  try {
+    auto pid = spawnProcess(
+      [cfg.shell, script]
+    , File("/dev/null", "r")
+    , outputFile
+    , outputFile
+    , cfg.env(test, tmpdir)
+    , Config.retainStderr | Config.retainStdout | Config.newEnv
+    , workdir
+    );
+    return pid.wait;
+  } catch (ProcessException e) {
+    stderr.writefln("%s", e.msg);
+    return 1;
+  }
 } // }}}
 
 Array!Output collectOutputs(DramConfig cfg, File outputFile) // {{{
