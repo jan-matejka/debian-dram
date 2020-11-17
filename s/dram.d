@@ -308,10 +308,9 @@ struct DramConfig // {{{
         return 1;
     }
 
-    auto exPatch = runPatch(this, r.testFile, r.diff.name);
-    if (exPatch)
-      writefln("failed to patch %s from %s", r.testFile, r.diff.name);
-    return exPatch;
+    if (runPatch(this, r.testFile, r.diff.name))
+      stderr.writefln("Failed to patch %s from %s", r.testFile, r.diff.name);
+    return 1;
   } // }}}
   string[string] env(string test, string tmpdir) // {{{
   {
@@ -693,7 +692,12 @@ int runDiff(DramConfig cfg, string test, string result, File sink) // {{{
 
 int runPatch(DramConfig cfg, string test, string patch) // {{{
 {
-  return spawnProcess(
-    [cfg.patchcmd, "-s", test, patch]
-  ).wait;
+  try {
+    return spawnProcess(
+      [cfg.patchcmd, "-s", test, patch]
+    ).wait;
+  } catch (ProcessException e) {
+    stderr.writefln("%s", e.msg);
+    return 1;
+  }
 } // }}}
