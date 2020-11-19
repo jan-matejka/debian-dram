@@ -122,6 +122,7 @@ int main(string[] argv) // {{{
 
 struct DramConfig // {{{
 {
+  string[] envvars;
   bool   failfast;
   bool   keepenv;
   bool   keeptmp;
@@ -155,6 +156,7 @@ struct DramConfig // {{{
 
   this(string[string] env) // {{{
   {
+    envvars = env.get("DRAM_ENV", "").split;
     failfast = isAnyOf("1Yy", env.get("DRAM_FAIL_FAST", "0"));
     keepenv = isAnyOf("1Yy", env.get("DRAM_KEEP_ENVIRON", "0"));
     keeptmp = isAnyOf("1Yy", env.get("DRAM_KEEP_TMPDIR", "0"));
@@ -315,7 +317,7 @@ struct DramConfig // {{{
   string[string] env(string test, string tmpdir) // {{{
   {
     string[string] env;
-    if (keepenv)
+    if (keepenv) {
       // -E / DRAM_KEEP_ENVIRON=[1Yy] preserves existing env. variables
       // DRAM_* ones are always removed, because not doing so would
       // break running dram in dram tests.
@@ -325,7 +327,7 @@ struct DramConfig // {{{
         .filter!(nv => !nv.key.startsWith("DRAM_"))
         .assocArray
       ;
-    else
+    } else {
       // this is the default environment
       env = [
         "COLUMNS": "80"
@@ -335,6 +337,13 @@ struct DramConfig // {{{
       , "PATH": environment.get("PATH", "/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin")
       , "TZ": "UTC"
       ];
+      // variables forced using -e / $DRAM_ENV
+      envvars.each!((n) {
+        auto v = environment.get(n);
+        if (v != null)
+          env[n] = v;
+      });
+    }
     // these are always present, and specific to each testfile
     [
       "TESTDIR": test.dirName.absolutePath.buildNormalizedPath

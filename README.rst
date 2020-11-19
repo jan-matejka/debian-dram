@@ -165,9 +165,11 @@ while Dram will produce ::
 Test Isolation
 ++++++++++++++
 
-Dram runs each testfile with its own ``$TMPDIR``.
-Cram runs all testfiles in a directory with a common
-``$TMPDIR``, and does not empty it between tests.
+* Dram runs tests in very limited environment.
+  Use `-e` to run tests with additional environment variables.
+* Dram runs each testfile with its own ``$TMPDIR``.
+  Cram runs all testfiles in a directory with a common
+  ``$TMPDIR``, and does not empty it between tests.
 
 Console Output
 ++++++++++++++

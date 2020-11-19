@@ -17,6 +17,7 @@
 .Nm
 . Op Fl DETfinvy
 . Op Fl I Ar INDENT
+. Oo Fl e Ar VAR Ns Oo Li = Ns Ar VAL Oc Oc Ns ...
 . Op Fl s Ar SHELL
 . Op Fl t Ar SUFFIX
 . Ar TEST...
@@ -57,6 +58,19 @@ Preserve existing environment variables.
 .No Number of spaces used for test code indentation Pq default: Li 2 .
 . It Fl T
 Leave behind working files.
+. It Fl e Ar VAR Ns Op Li = Ns Ar VAL
+Run tests with
+. Ev VAR
+set to
+. Ar VAL
+in environment.
+In the
+. Fl e Ar VAR
+form,
+. Ev VAR
+is copied from
+. Nm Ns 's
+environment.
 . It Fl f
 Abort after first failed test.
 Skip any remaining tests.
@@ -82,6 +96,10 @@ Answer yes to all questions.
 .Bl -tag -width xx
 .It DRAM_DIFF
 . No Program used to generate diffs.  Defaults to Pa diff .
+.It DRAM_ENV
+Whitespace-separated list of environment variables to copy from
+.Nm Ns 's
+environment into the environment of each test.
 .It DRAM_FAIL_FAST
 . No If set to any of Qo Li 1Yy Qc , enables Fl f .
 .It DRAM_INDENT
@@ -125,7 +143,10 @@ variables and values by default.
 This behavior can be inhibited by
 .Fl E
 or
-.Ev DRAM_KEEP_ENVIRON .
+.Ev DRAM_KEEP_ENVIRON , and augmented using
+.Fl e Ar VAR Ns Op Li = Ns Ar VAL
+and/or
+.Ev DRAM_ENV .
 Environment variables with names starting with
 .Qq Li DRAM_
 are
