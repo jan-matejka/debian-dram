@@ -14,16 +14,16 @@ setup::
   >   LINES=20
   >   PATH=* (glob)
   >   PWD=* (glob)
-  >   TESTDIR=/*#env.t/work (glob)
+  >   TESTDIR=/*#default.t/work (glob)
   >   TESTFILE=testfile
-  >   TMPDIR=/*#env.t#work#testfile/tmp (glob)
+  >   TMPDIR=/*#default.t#work#testfile/tmp (glob)
   >   TZ=UTC
   > EOF
 
 
 test::
 
-  $ dram testfile
+  $ COLUMNS=120 LINES=25 dram testfile
   .
   
   tests: 1, skipped: 0, failed: 0
