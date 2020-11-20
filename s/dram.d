@@ -83,7 +83,7 @@ int main(string[] argv) // {{{
       auto done = results.map!(tr => tr.testFile);
       results ~= tests
         .filter!(x => !done.canFind(x))
-        .map!(tf => TestResult(80, tf))
+        .map!(tf => TestResult(TestStatus.skip, tf))
         .cache
         .tee!(r => cfg.report(r))
         .array
@@ -416,7 +416,12 @@ TestResult runTest(DramConfig cfg, string testFile) // {{{
   auto exit = runScript(cfg, testFile, script.name, outputFile);
   if (exit) {
     stopWatch.stop;
-    return TestResult(exit, testFile, twd, stopWatch.peek);
+    return TestResult(
+      exit == 80 ? TestStatus.skip : TestStatus.error
+    , testFile
+    , twd
+    , stopWatch.peek
+    );
   }
 
   outputFile.rewind;
@@ -436,28 +441,46 @@ TestResult runTest(DramConfig cfg, string testFile) // {{{
   else
     diff.close;
   stopWatch.stop;
-  return TestResult(exDiff, testFile, twd, stopWatch.peek, diff);
+  return TestResult(
+    exDiff == 0
+    ? TestStatus.success
+    : exDiff == 1
+      ? TestStatus.fail
+      : TestStatus.error
+  , testFile
+  , twd
+  , stopWatch.peek
+  , diff
+  );
 } // }}}
 
 struct TestResult // {{{
 {
-  int exit;
+  TestStatus status;
   string testFile;
   string twd;
   Duration time;
   File diff;
   bool fail() // {{{
   {
-    return exit != 0 && exit != 80;
+    return status == TestStatus.fail;
   } // }}}
   bool skip() // {{{
   {
-    return exit == 80;
+    return status == TestStatus.skip;
   } // }}}
   bool success() // {{{
   {
-    return exit == 0;
+    return status == TestStatus.success;
   } // }}}
+} // }}}
+
+enum TestStatus // {{{
+{
+  success
+, skip
+, fail
+, error
 } // }}}
 
 // a testfile is prose interspersed with command blocks
