@@ -125,6 +125,12 @@ int main(string[] argv) // {{{
     if (broken) exit |= 0b100;
     if (fails)  exit |= 0b010;
     return exit;
+  } catch (ToolFailure e) {
+    stderr.writeln("Failed command: " ~ e.msg);
+    return 0b1000;
+  } catch (ProcessException e) {
+    stderr.writeln(e.msg);
+    return 0b1000;
   } catch (FileException e) {
     stderr.writeln(e.msg);
     return 0b1000;
@@ -313,7 +319,7 @@ struct DramConfig // {{{
       r.diff.byLine.each!writeln;
 
     if (!update)
-      return 1;
+      return 0;
 
     // $DRAM_UPDATE is either "1", "[Yy]es" or "[Aa]sk"
 
@@ -322,12 +328,10 @@ struct DramConfig // {{{
 
       auto reply = std.stdio.stdin.readln;
       if (reply.length && 0 > "Yy".indexOf(reply[0]))
-        return 1;
+        return 0;
     }
 
-    if (runPatch(this, r.testFile, r.diff.name))
-      stderr.writefln("Failed to patch %s from %s", r.testFile, r.diff.name);
-    return 1;
+    return runPatch(this, r.testFile, r.diff.name);
   } // }}}
   string[string] env(string test, string tmpdir) // {{{
   {
@@ -651,21 +655,15 @@ int runScript(DramConfig cfg, string test, string script, File outputFile) // {{
   workdir.mkdir;
   tmpdir.mkdir;
 
-  try {
-    auto pid = spawnProcess(
-      [cfg.shell, script]
-    , File("/dev/null", "r")
-    , outputFile
-    , outputFile
-    , cfg.env(test, tmpdir)
-    , Config.retainStderr | Config.retainStdout | Config.newEnv
-    , workdir
-    );
-    return pid.wait;
-  } catch (ProcessException e) {
-    stderr.writefln("%s", e.msg);
-    return 1;
-  }
+  return spawnProcess(
+    [cfg.shell, script]
+  , File("/dev/null", "r")
+  , outputFile
+  , outputFile
+  , cfg.env(test, tmpdir)
+  , Config.retainStderr | Config.retainStdout | Config.newEnv
+  , workdir
+  ).wait;
 } // }}}
 
 Array!Output collectOutputs(DramConfig cfg, File outputFile) // {{{
@@ -726,29 +724,33 @@ struct Output // {{{
 
 int runDiff(DramConfig cfg, string test, string result, File sink) // {{{
 {
-  try {
-    return spawnProcess(
-      [cfg.diffcmd, "-u", "--label", test, "--label", test, test, result]
-    , std.stdio.stdin
-    , sink
-    , std.stdio.stderr
-    , null
-    , Config.retainStdout
-    ).wait;
-  } catch (ProcessException e) {
-    stderr.writefln("%s", e.msg);
-    return 1;
-  }
+  auto argv = [cfg.diffcmd, "-u", "--label", test, "--label", test, test, result];
+  auto ex = spawnProcess(
+    argv
+  , std.stdio.stdin
+  , sink
+  , std.stdio.stderr
+  , null
+  , Config.retainStdout
+  ).wait;
+  if (ex > 1)
+    throw new ToolFailure(escapeShellCommand(argv));
+  return ex;
 } // }}}
 
 int runPatch(DramConfig cfg, string test, string patch) // {{{
 {
-  try {
-    return spawnProcess(
-      [cfg.patchcmd, "-s", test, patch]
-    ).wait;
-  } catch (ProcessException e) {
-    stderr.writefln("%s", e.msg);
-    return 1;
-  }
+  auto argv = [cfg.patchcmd, "-s", test, patch];
+  auto ex = spawnProcess(argv).wait;
+  if (ex)
+    throw new ToolFailure(escapeShellCommand(argv));
+  return ex;
 } // }}}
+
+class ToolFailure : Exception
+{
+  this(string msg, string file = __FILE__, size_t line = __LINE__)
+  {
+    super(msg, file, line);
+  }
+}

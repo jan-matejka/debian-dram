@@ -189,7 +189,18 @@ removed from the environment of tests.
 .
 .\" EXIT STATUS {{{
 .Sh EXIT STATUS
-.Ex -std
+.Bl -tag
+.It 0
+Success.
+.It 1
+Usage error.
+.It 2
+A test failed.
+.It 4
+A test was broken.
+.It 8
+External utility error.
+.El
 .\" }}}
 .
 .\" EXAMPLES {{{

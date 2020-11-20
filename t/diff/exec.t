@@ -11,18 +11,9 @@ setup::
 
   $ cp 1.t 2.t
 
-  $ cat >snafubar <<\EOF
-  > #!/bin/sh
-  > echo >&2 'stderr from "diff"'
-  > exit 2
-  > EOF
-
-  $ chmod +x snafubar
-
 
 test::
 
   $ DRAM_DIFF=$PWD/snafubar dram *.t
-  stderr from "diff"
-  Failed command: '*/snafubar' '-u' '--label' '1.t' '--label' '1.t' '1.t' '*/1.t/result' (glob)
+  Not an executable file: */snafubar (glob)
   [8]

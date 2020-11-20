@@ -17,9 +17,4 @@ test::
 
   $ dram -s $PWD/snafubar *.t
   Not an executable file: */snafubar (glob)
-  Not an executable file: */snafubar (glob)
-  Not an executable file: */snafubar (glob)
-  XXX
-  
-  # Ran 3 tests, 3 broke.
-  [4]
+  [8]

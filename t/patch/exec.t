@@ -11,13 +11,6 @@ setup::
 
   $ cp 1.t 2.t
 
-  $ cat >snafubar <<\EOF
-  > #!/bin/sh
-  > echo >&2 'stderr from "patch"'
-  > exit 1
-  > EOF
-
-  $ chmod +x snafubar
 
 test::
 
@@ -29,6 +22,5 @@ test::
      $ echo X
   -  Y
   +  X
-  stderr from "patch"
-  Failed command: '*/snafubar' '-s' '1.t' '*/1.t/diff' (glob)
+  Not an executable file: */snafubar (glob)
   [8]
