@@ -1,5 +1,5 @@
-`dram -iy` with a failing test
-==============================
+`dram -u` with a failing test
+=============================
 
 when actual test results differ from expectations, `dram` should
 produce on standard output a unified diff between expected
@@ -20,7 +20,7 @@ setup::
 
 test::
 
-  $ dram -Diy t1
+  $ dram -Du t1
   !
   
   tests: 1, skipped: 0, failed: 1

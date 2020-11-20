@@ -15,7 +15,7 @@
 .Nm
 . Fl h | V
 .Nm
-. Op Fl DETfinvy
+. Op Fl DETUfiuv
 . Op Fl I Ar INDENT
 . Oo Fl e Ar VAR Ns Oo Li = Ns Ar VAL Oc Oc Ns ...
 . Op Fl s Ar SHELL
@@ -58,6 +58,12 @@ Preserve existing environment variables.
 .No Number of spaces used for test code indentation Pq default: Li 2 .
 . It Fl T
 Leave behind working files.
+. It Fl U
+Do not merge actual output into tests.
+Overrides preceding
+. Fl i
+and
+. Fl u .
 . It Fl e Ar VAR Ns Op Li = Ns Ar VAL
 Run tests with
 . Ev VAR
@@ -75,23 +81,31 @@ environment.
 Abort after first failed test.
 Skip any remaining tests.
 . It Fl i
-Interactively merge changed test output.
-. It Fl n
-Answer no to all questions.
+Interactively merge actual output into tests.
+Overrides preceding
+. Fl U
+and
+. Fl u .
 . It Fl s Ar SHELL
 .No Shell to use for running tests Pq default: Li sh .
 . It Fl t Ar SUFFIX
 .No Extension of testfiles Pq default: Li .t .
+. It Fl u
+Merge actual output into tests.
+Overrides preceding
+. Fl U
+and
+. Fl i .
 . It Fl v
 Show filenames with test statuses.
-. It Fl y
-Answer yes to all questions.
 .El
 .\" }}}
 .
 .\" ENVIRONMENT {{{
 .Sh ENVIRONMENT
 .Ss Variables used by Nm
+.
+Options take precedence over corresponding environment variables.
 .
 .Bl -tag -width xx
 .It DRAM_DIFF
@@ -117,7 +131,8 @@ exit code lines.
 . No See Fl s .
 .It DRAM_UPDATE
 . No If set to any of Qo Li Aa Qc , enables Fl i .
-. No If set to any of Qo Li 1Yy Qc , enables Fl i No and Fl y.
+. No If set to any of Qo Li 1Yy Qc , enables Fl u .
+. No If unset or set to any other value, enables Fl U .
 .It DRAM_TEST_SUFFIX
 . No See Fl t .
 .It DRAM_TMPDIR

@@ -19,7 +19,7 @@ setup::
 
 test::
 
-  $ DRAM_PATCH=$PWD/bin/mypatch dram -iy *.t
+  $ DRAM_PATCH=$PWD/bin/mypatch dram -u *.t
   !
   --- 1.t
   +++ 1.t

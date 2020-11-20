@@ -36,14 +36,14 @@ Options:
   -E            preserve existing environment variables
   -I INDENT     number of spaces used for test code indentation (default: 2)
   -T            leave behind temporary files
+  -U            do not merge actual output into tests
   -e VAR[=VAL]  run tests with VAR in environment
   -f            abort after first failed test
-  -i            interactively merge changed test output
-  -n            answer no to all questions
+  -i            interactively merge actual output into tests
   -s SHELL      shell to use for running tests (default: sh)
   -t SUFFIX     extension of testfiles (default: .t)
+  -u            merge actual output into tests
   -v            show filenames and test statuses
-  -y            answer yes to all questions
 HELP
   exit ${1-$?}
 } # }}}
@@ -56,7 +56,7 @@ VERSION
   exit
 } # }}}
 
-while getopts :hVDEI:Te:fij:ns:t:vy opt "$@"; do
+while getopts :hVDEI:TUe:fij:s:t:uv opt "$@"; do
   case $opt in
   h) usage 0 ;;
   V) version ;;
@@ -74,6 +74,7 @@ while getopts :hVDEI:Te:fij:ns:t:vy opt "$@"; do
     esac
   ;;
   T) export DRAM_KEEP_TMPDIR=1 ;;
+  U) export DRAM_UPDATE=0 ;;
   e)
     export "$OPTARG"
     export DRAM_ENV="$DRAM_ENV ${OPTARG%%=*}"
@@ -81,11 +82,10 @@ while getopts :hVDEI:Te:fij:ns:t:vy opt "$@"; do
   f) export DRAM_FAIL_FAST=1 ;;
   i) export DRAM_UPDATE=ask ;;
   j) export DRAM_JUNIT_FILE="$OPTARG" ;;
-  n) export DRAM_UPDATE=no ;;
   s) export DRAM_SHELL="$OPTARG" ;;
   t) export DRAM_TEST_SUFFIX="$OPTARG" ;;
+  u) export DRAM_UPDATE=1 ;;
   v) export DRAM_VERBOSE=1 ;;
-  y) export DRAM_UPDATE=yes ;;
   \?)
     printf -->&2 "%s: uknown option '-%s'\n" "${0##*/}" "$OPTARG"
     exit 1

@@ -14,7 +14,7 @@ setup::
 
 test::
 
-  $ DRAM_PATCH=$PWD/snafubar dram -iy *.t
+  $ DRAM_PATCH=$PWD/snafubar dram -u *.t
   !!
   --- 1.t
   +++ 1.t

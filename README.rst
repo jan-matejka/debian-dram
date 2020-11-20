@@ -100,6 +100,7 @@ Command Line Interface
 * Dram only does short options.
 * There's no `-d` / `--debug` (use `-T` and examine the files left behind).
 * Dram has `-j` instead of `--xunit-file`.
+* Dram has `-u` instead of `-iy`, `-U` instead of `-in`.
 * Dram has `-D` instead of `-q`.
 
 Testfile Syntax
