@@ -20,14 +20,8 @@ setup::
 
 test::
 
-  $ dram -iy t1
+  $ dram -Diy t1
   !
-  --- t1
-  +++ t1
-  @@ -1,2 +1,2 @@
-     $ echo hello
-  -  goodbye
-  +  hello
   
   tests: 1, skipped: 0, failed: 1
   [1]

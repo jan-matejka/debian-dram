@@ -20,14 +20,8 @@ setup::
 
 test::
 
-  $ yes y | dram -i t1
+  $ yes y | dram -Di t1
   !
-  --- t1
-  +++ t1
-  @@ -1,2 +1,2 @@
-     $ echo hello
-  -  goodbye
-  +  hello
   t1 failed. Apply results? [Y/n]
   
   tests: 1, skipped: 0, failed: 1

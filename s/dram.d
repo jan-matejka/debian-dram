@@ -292,10 +292,8 @@ struct DramConfig // {{{
     if (!r.diff.isOpen)
       return 0;
 
-    if (nodiffs)
-      return 1;
-
-    r.diff.byLine.each!writeln;
+    if (!nodiffs)
+      r.diff.byLine.each!writeln;
 
     if (!update)
       return 1;
