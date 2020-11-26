@@ -15,5 +15,5 @@ test::
   $ dram -D testfile
   !
   
-  tests: 1, skipped: 0, failed: 1
-  [1]
+  # Ran 1 test, 1 failed.
+  [2]

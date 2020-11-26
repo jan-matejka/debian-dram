@@ -17,7 +17,7 @@ test::
   $ dram testfile-0
   s
   
-  tests: 1, skipped: 1, failed: 0
+  # Ran 1 test, 1 skipped.
 
 
 not that this does not extend to exit codes from
@@ -40,8 +40,8 @@ test::
      $ (exit 80)
   +  [80]
   
-  tests: 1, skipped: 0, failed: 1
-  [1]
+  # Ran 1 test, 1 failed.
+  [2]
 
 
 test results from the file are ignored.
@@ -63,10 +63,10 @@ test::
   $ dram testfile-2
   s
   
-  tests: 1, skipped: 1, failed: 0
+  # Ran 1 test, 1 skipped.
 
 
   $ dram -v testfile-2
   s testfile-2
   
-  tests: 1, skipped: 1, failed: 0
+  # Ran 1 test, 1 skipped.

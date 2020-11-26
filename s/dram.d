@@ -65,8 +65,6 @@ int main(string[] argv) // {{{
 
     cfg.setUp;
 
-    auto skipped = 0;
-    auto failed  = 0;
     auto results = tests
       .map!(test => runTest(cfg, test))
       .cache
@@ -79,7 +77,9 @@ int main(string[] argv) // {{{
       .array
     ;
 
-    if (results.length < tests.length) {
+    auto total = tests.length;
+
+    if (results.length < total) {
       auto done = results.map!(tr => tr.testFile);
       results ~= tests
         .filter!(x => !done.canFind(x))
@@ -91,32 +91,43 @@ int main(string[] argv) // {{{
     }
 
     // tally results
+    auto broken = 0;
+    auto fails  = 0;
+    auto skips  = 0;
     results.each!((r) {
-      skipped += r.skip;
-      failed  += r.fail;
+      broken += r.error;
+      fails  += r.fail;
+      skips  += r.skip;
     });
 
     if (!cfg.verbose && !results.empty)
       writeln;
 
     // if any test failed, exit 1
-    auto exit = results
-      .map!(r => cfg.diffAndPatch(r))
-      .sum > 0
-    ;
+    results.each!(r => cfg.diffAndPatch(r));
 
-    "\ntests: %d, skipped: %d, failed: %d".writefln(
-      tests.length
-    , skipped
-    , failed
+    auto summary = "\n# Ran %1$d %2$s";
+    if (skips)  summary ~= ", %3$d skipped";
+    if (fails)  summary ~= ", %4$d failed";
+    if (broken) summary ~= ", %5$d broke";
+    summary ~= ".";
+    summary.writefln(
+      total
+    , total == 1 ? "test" : "tests"
+    , skips
+    , fails
+    , broken
     );
 
-    cfg.cleanUp(results, skipped, failed);
+    cfg.cleanUp(results, skips, fails);
 
-    return failed ? 1 : exit;
+    auto exit = 0;
+    if (broken) exit |= 0b100;
+    if (fails)  exit |= 0b010;
+    return exit;
   } catch (FileException e) {
     stderr.writeln(e.msg);
-    return 1;
+    return 0b1000;
   }
 } // }}}
 
@@ -278,11 +289,17 @@ struct DramConfig // {{{
   } // }}}
   bool failFast(TestResult r) // {{{
   {
-    return failfast ? r.fail : false;
+    return failfast && (r.fail || r.error);
   } // }}}
   void report(TestResult r) // {{{
   {
-    (r.fail ? "!" : r.skip ? "s" : ".").write;
+    final switch (r.status)
+    {
+      case TestStatus.success: write("."); break;
+      case TestStatus.skip:    write("s"); break;
+      case TestStatus.fail:    write("!"); break;
+      case TestStatus.error:   write("X"); break;
+    }
     if (verbose)
       writeln(" ", r.testFile);
   } // }}}
@@ -442,9 +459,9 @@ TestResult runTest(DramConfig cfg, string testFile) // {{{
     diff.close;
   stopWatch.stop;
   return TestResult(
-    exDiff == 0
+    exit == 0 && exDiff == 0
     ? TestStatus.success
-    : exDiff == 1
+    : exit == 0 && exDiff == 1
       ? TestStatus.fail
       : TestStatus.error
   , testFile
@@ -461,6 +478,10 @@ struct TestResult // {{{
   string twd;
   Duration time;
   File diff;
+  bool error() // {{{
+  {
+    return status == TestStatus.error;
+  } // }}}
   bool fail() // {{{
   {
     return status == TestStatus.fail;

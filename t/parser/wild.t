@@ -30,7 +30,7 @@ setup::
   $ dram -T indents.t
   .
   
-  tests: 1, skipped: 0, failed: 0
+  # Ran 1 test.
   preserved * (glob)
 
 
@@ -68,7 +68,7 @@ setup::
   $ dram -T no-tests.t
   .
   
-  tests: 1, skipped: 0, failed: 0
+  # Ran 1 test.
   preserved * (glob)
 
 

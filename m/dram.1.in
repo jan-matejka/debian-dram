@@ -191,7 +191,25 @@ removed from the environment of tests.
 .Sh EXIT STATUS
 .Ex -std
 .\" }}}
+.
+.\" EXAMPLES {{{
+.Sh EXAMPLES
+.Bd -literal
+$ dram t
+s.!X
+--- 3.t
++++ 3.t
+@@ -1,2 +1,2 @@
+   $ echo hello
+-  goodbye
++  hello
 
+# 3 tests, 1 skipped, 1 failed, 1 broken
+$ echo $?
+6
+.Ed
+.\" }}}
+.
 .\" SEE ALSO {{{
 .Sh SEE ALSO
 .Xr diff 1 ,

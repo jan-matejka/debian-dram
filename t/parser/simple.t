@@ -17,7 +17,7 @@ setup::
   $ dram -T testfile
   .
   
-  tests: 1, skipped: 0, failed: 0
+  # Ran 1 test.
   preserved * (glob)
 
 

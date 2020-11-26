@@ -34,5 +34,5 @@ test::
      b (re)
      c (re)
   
-  tests: 1, skipped: 0, failed: 1
-  [1]
+  # Ran 1 test, 1 failed.
+  [2]

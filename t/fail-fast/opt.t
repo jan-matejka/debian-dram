@@ -15,8 +15,8 @@ test::
   $ dram -Df a b c d e
   ..!ss
   
-  tests: 5, skipped: 2, failed: 1
-  [1]
+  # Ran 5 tests, 2 skipped, 1 failed.
+  [2]
 
 
 test::
@@ -28,5 +28,5 @@ test::
   s d
   s e
   
-  tests: 5, skipped: 2, failed: 1
-  [1]
+  # Ran 5 tests, 2 skipped, 1 failed.
+  [2]

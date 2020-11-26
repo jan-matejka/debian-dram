@@ -26,4 +26,4 @@ test::
   $ SNAFUBAR=roflmao COLUMNS=120 LINES=25 DRAM_KEEP_ENVIRON=1 dram testfile
   .
   
-  tests: 1, skipped: 0, failed: 0
+  # Ran 1 test.

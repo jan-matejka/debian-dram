@@ -45,5 +45,5 @@ test::
      $ false
   +  [1]
   
-  tests: 7, skipped: 1, failed: 3
-  [1]
+  # Ran 7 tests, 1 skipped, 3 failed.
+  [2]

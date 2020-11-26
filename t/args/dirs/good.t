@@ -17,4 +17,4 @@ test::
   $ dram a b
   ......
   
-  tests: 6, skipped: 0, failed: 0
+  # Ran 6 tests.

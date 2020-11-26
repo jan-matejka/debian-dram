@@ -17,7 +17,7 @@ test::
   $ dram testfile-0
   .
   
-  tests: 1, skipped: 0, failed: 0
+  # Ran 1 test.
 
 
 setup::
@@ -34,4 +34,4 @@ test::
   $ dram testfile-1
   .
   
-  tests: 1, skipped: 0, failed: 0
+  # Ran 1 test.

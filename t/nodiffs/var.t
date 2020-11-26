@@ -15,8 +15,8 @@ test::
   $ DRAM_NODIFFS=1 dram testfile
   !
   
-  tests: 1, skipped: 0, failed: 1
-  [1]
+  # Ran 1 test, 1 failed.
+  [2]
 
 
 test::
@@ -24,8 +24,8 @@ test::
   $ DRAM_NODIFFS=y dram testfile
   !
   
-  tests: 1, skipped: 0, failed: 1
-  [1]
+  # Ran 1 test, 1 failed.
+  [2]
 
 
 test::
@@ -33,8 +33,8 @@ test::
   $ DRAM_NODIFFS=Y dram testfile
   !
   
-  tests: 1, skipped: 0, failed: 1
-  [1]
+  # Ran 1 test, 1 failed.
+  [2]
 
 
 test::
@@ -48,8 +48,8 @@ test::
   -  goodbye
   +  hello
   
-  tests: 1, skipped: 0, failed: 1
-  [1]
+  # Ran 1 test, 1 failed.
+  [2]
 
 
 test::
@@ -63,5 +63,5 @@ test::
   -  goodbye
   +  hello
   
-  tests: 1, skipped: 0, failed: 1
-  [1]
+  # Ran 1 test, 1 failed.
+  [2]

@@ -19,7 +19,7 @@ test::
   Not an executable file: */snafubar (glob)
   Not an executable file: */snafubar (glob)
   Not an executable file: */snafubar (glob)
-  !!!
+  XXX
   
-  tests: 3, skipped: 0, failed: 3
-  [1]
+  # Ran 3 tests, 3 broke.
+  [4]

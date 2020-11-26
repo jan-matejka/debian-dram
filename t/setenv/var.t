@@ -26,7 +26,7 @@ test::
   $ DRAM_ENV="LOL ROFL" dram testfile
   .
   
-  tests: 1, skipped: 0, failed: 0
+  # Ran 1 test.
 
 
 test::
@@ -45,5 +45,5 @@ test::
      PWD=* (glob)
      ROFL=omg wtf
   
-  tests: 1, skipped: 0, failed: 1
-  [1]
+  # Ran 1 test, 1 failed.
+  [2]

@@ -16,4 +16,4 @@ test::
   . b.foo
   . c.foo
   
-  tests: 3, skipped: 0, failed: 0
+  # Ran 3 tests.

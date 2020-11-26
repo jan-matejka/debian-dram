@@ -33,5 +33,5 @@ test::
          > not-an-output
          [0] not an exit code
   
-  tests: 1, skipped: 0, failed: 1
-  [1]
+  # Ran 1 test, 1 failed.
+  [2]

@@ -19,8 +19,8 @@ test::
   $ dram -Dj report.xml t
   ..!.!.
   
-  tests: 6, skipped: 0, failed: 2
-  [1]
+  # Ran 6 tests, 2 failed.
+  [2]
 
   $ cat report.xml
   <?xml version="1.0" encoding="UTF-8"?>

@@ -6,4 +6,4 @@ test::
 
   $ dram .
   
-  tests: 0, skipped: 0, failed: 0
+  # Ran 0 tests.

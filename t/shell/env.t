@@ -27,4 +27,4 @@ test::
   $ DRAM_SHELL=wtf dram testfile
   .
   
-  tests: 1, skipped: 0, failed: 0
+  # Ran 1 test.
