@@ -231,7 +231,7 @@ Implementation
 Dram is written in D and uses `diff(1)` and `patch(1)`
 to create and apply diffs.
 
-Because of defficiencies in `std.getopt`_, Dram comes as a pair
+Because of deficiencies in `std.getopt`_, Dram comes as a pair
 of programs: ``dram.bin``, the binary compiled from D source code,
 and ``dram``, a POSIX `sh(1)`-compatible wrapper.
 
