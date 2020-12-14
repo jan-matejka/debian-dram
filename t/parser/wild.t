@@ -36,7 +36,7 @@ setup::
 
 test::
 
-  $ cat $TMPDIR/*/*indents.t/script
+  $ cat $(find $TMPDIR -name indents.t)/script
   :
   echo DRAM\d+ 1 \$\? (re)
   echo hello; (exit 42)
@@ -74,6 +74,6 @@ setup::
 
 test::
 
-  $ cat $TMPDIR/*/*no-tests.t/script
+  $ cat $(find $TMPDIR -name no-tests.t)/script
   :
   echo DRAM\d+ 1 \$\? (re)

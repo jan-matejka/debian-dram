@@ -13,9 +13,9 @@ setup::
   >   PATH=* (glob)
   >   PWD=* (glob)
   >   ROFL=omg wtf
-  >   TESTDIR=/*#var.t/work (glob)
+  >   TESTDIR=/*/var.t/work (glob)
   >   TESTFILE=testfile
-  >   TMPDIR=/*#var.t#work#testfile/tmp (glob)
+  >   TMPDIR=/*/var.t/work/testfile/tmp (glob)
   >   TZ=UTC
   > EOF
 

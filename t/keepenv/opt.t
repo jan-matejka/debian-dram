@@ -15,7 +15,7 @@ setup::
   >   PATH=* (glob)
   >   PWD=* (glob)
   >   SNAFUBAR=roflmao
-  >   TESTDIR=/*#opt.t/work (glob)
+  >   TESTDIR=/*/opt.t/work (glob)
   >   TESTFILE=testfile
   >   TZ=UTC
   > EOF

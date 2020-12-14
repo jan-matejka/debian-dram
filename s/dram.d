@@ -408,7 +408,7 @@ TestResult runTest(DramConfig cfg, string testFile) // {{{
   // /tmp/cram-$PID/some.t-1 and /tmp/cram-$PID/some.t-2.
   // IOW, it's hard to tell which one is which.
   auto twd = cfg.tmpdir.buildNormalizedPath(
-    testFile.absolutePath.buildNormalizedPath.replace("/", "#")
+    testFile.absolutePath.buildNormalizedPath.stripLeft("/")
   ).to!string;
   twd.mkdirRecurse;
 

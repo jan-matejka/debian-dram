@@ -23,43 +23,44 @@ test::
   $ echo ${d%-*}
   dramtests
 
-  $ ls $T
-  *#failure (glob)
-  *#success (glob)
+  $ ls $T$PWD
+  failure
+  success
 
-  $ find $T -mindepth 2 | sort | sed "s:^$T/::"
-  *t#keeptmp#var.t#work#failure/diff (glob)
-  *t#keeptmp#var.t#work#failure/out (glob)
-  *t#keeptmp#var.t#work#failure/result (glob)
-  *t#keeptmp#var.t#work#failure/script (glob)
-  *t#keeptmp#var.t#work#failure/tmp (glob)
-  *t#keeptmp#var.t#work#failure/work (glob)
-  *t#keeptmp#var.t#work#success/diff (glob)
-  *t#keeptmp#var.t#work#success/out (glob)
-  *t#keeptmp#var.t#work#success/result (glob)
-  *t#keeptmp#var.t#work#success/script (glob)
-  *t#keeptmp#var.t#work#success/tmp (glob)
-  *t#keeptmp#var.t#work#success/work (glob)
+  $ find $T$PWD -mindepth 2 | sort | sed "s:^$T$PWD/::"
+  failure/diff
+  failure/out
+  failure/result
+  failure/script
+  failure/tmp
+  failure/work
+  success/diff
+  success/out
+  success/result
+  success/script
+  success/tmp
+  success/work
+
+  $ rm -r $T$PWD/failure $T$PWD/success
 
   $ mkdir x
-  $ cd x
 
-  $ T=$(DRAM_KEEP_TMPDIR=1 dram -D ../success ../failure | sed -n '$s/^preserved //p')
+  $ T=$(cd x; DRAM_KEEP_TMPDIR=1 dram -D ../success ../failure | sed -n '$s/^preserved //p')
 
-  $ ls $T
-  *#failure (glob)
-  *#success (glob)
+  $ ls $T$PWD
+  failure
+  success
 
-  $ find $T -mindepth 2 | sort | sed "s:^$T/::"
-  *t#keeptmp#var.t#work#failure/diff (glob)
-  *t#keeptmp#var.t#work#failure/out (glob)
-  *t#keeptmp#var.t#work#failure/result (glob)
-  *t#keeptmp#var.t#work#failure/script (glob)
-  *t#keeptmp#var.t#work#failure/tmp (glob)
-  *t#keeptmp#var.t#work#failure/work (glob)
-  *t#keeptmp#var.t#work#success/diff (glob)
-  *t#keeptmp#var.t#work#success/out (glob)
-  *t#keeptmp#var.t#work#success/result (glob)
-  *t#keeptmp#var.t#work#success/script (glob)
-  *t#keeptmp#var.t#work#success/tmp (glob)
-  *t#keeptmp#var.t#work#success/work (glob)
+  $ find $T$PWD -mindepth 2 | sort | sed "s:^$T$PWD/::"
+  failure/diff
+  failure/out
+  failure/result
+  failure/script
+  failure/tmp
+  failure/work
+  success/diff
+  success/out
+  success/result
+  success/script
+  success/tmp
+  success/work

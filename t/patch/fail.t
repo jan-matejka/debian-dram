@@ -23,7 +23,7 @@ test::
   -  Y
   +  X
   Not an executable file: */snafubar (glob)
-  Failed to patch 1.t from *#1.t/diff (glob)
+  Failed to patch 1.t from */1.t/diff (glob)
   --- 2.t
   +++ 2.t
   @@ -1,2 +1,2 @@
@@ -31,7 +31,7 @@ test::
   -  Y
   +  X
   Not an executable file: */snafubar (glob)
-  Failed to patch 2.t from *#2.t/diff (glob)
+  Failed to patch 2.t from */2.t/diff (glob)
   
   # Ran 2 tests, 2 failed.
   [2]

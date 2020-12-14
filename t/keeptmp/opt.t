@@ -23,43 +23,44 @@ test::
   $ echo ${d%-*}
   dramtests
 
-  $ ls $T
-  *#failure (glob)
-  *#success (glob)
+  $ ls $T$PWD
+  failure
+  success
 
-  $ find $T -mindepth 2 | sort | sed "s:^$T/::"
-  *t#keeptmp#opt.t#work#failure/diff (glob)
-  *t#keeptmp#opt.t#work#failure/out (glob)
-  *t#keeptmp#opt.t#work#failure/result (glob)
-  *t#keeptmp#opt.t#work#failure/script (glob)
-  *t#keeptmp#opt.t#work#failure/tmp (glob)
-  *t#keeptmp#opt.t#work#failure/work (glob)
-  *t#keeptmp#opt.t#work#success/diff (glob)
-  *t#keeptmp#opt.t#work#success/out (glob)
-  *t#keeptmp#opt.t#work#success/result (glob)
-  *t#keeptmp#opt.t#work#success/script (glob)
-  *t#keeptmp#opt.t#work#success/tmp (glob)
-  *t#keeptmp#opt.t#work#success/work (glob)
+  $ find $T$PWD -mindepth 2 | sort | sed "s:^$T$PWD/::"
+  failure/diff
+  failure/out
+  failure/result
+  failure/script
+  failure/tmp
+  failure/work
+  success/diff
+  success/out
+  success/result
+  success/script
+  success/tmp
+  success/work
+
+  $ rm -r $T$PWD/failure $T$PWD/success
 
   $ mkdir x
-  $ cd x
 
-  $ T=$(dram -DT ../success ../failure | sed -n '$s/^preserved //p')
+  $ T=$(cd x; dram -DT ../success ../failure | sed -n '$s/^preserved //p')
 
-  $ ls $T
-  *#failure (glob)
-  *#success (glob)
+  $ ls $T$PWD
+  failure
+  success
 
-  $ find $T -mindepth 2 | sort | sed "s:^$T/::"
-  *t#keeptmp#opt.t#work#failure/diff (glob)
-  *t#keeptmp#opt.t#work#failure/out (glob)
-  *t#keeptmp#opt.t#work#failure/result (glob)
-  *t#keeptmp#opt.t#work#failure/script (glob)
-  *t#keeptmp#opt.t#work#failure/tmp (glob)
-  *t#keeptmp#opt.t#work#failure/work (glob)
-  *t#keeptmp#opt.t#work#success/diff (glob)
-  *t#keeptmp#opt.t#work#success/out (glob)
-  *t#keeptmp#opt.t#work#success/result (glob)
-  *t#keeptmp#opt.t#work#success/script (glob)
-  *t#keeptmp#opt.t#work#success/tmp (glob)
-  *t#keeptmp#opt.t#work#success/work (glob)
+  $ find $T$PWD -mindepth 2 | sort | sed "s:^$T$PWD/::"
+  failure/diff
+  failure/out
+  failure/result
+  failure/script
+  failure/tmp
+  failure/work
+  success/diff
+  success/out
+  success/result
+  success/script
+  success/tmp
+  success/work
