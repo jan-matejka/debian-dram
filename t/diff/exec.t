@@ -15,5 +15,5 @@ setup::
 test::
 
   $ DRAM_DIFF=$PWD/snafubar dram *.t
-  Not an executable file: */snafubar (glob)
+  Failed to execute '*/snafubar' (No such file or directory) (glob)
   [8]

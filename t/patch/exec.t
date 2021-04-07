@@ -22,5 +22,5 @@ test::
      $ echo X
   -  Y
   +  X
-  Not an executable file: */snafubar (glob)
+  Failed to execute '*/snafubar' (No such file or directory) (glob)
   [8]
