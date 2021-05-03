@@ -77,7 +77,8 @@ while getopts :hVDEI:TUe:fij:s:t:uv opt "$@"; do
   U) export DRAM_UPDATE=0 ;;
   e)
     export "$OPTARG"
-    export DRAM_ENV="$DRAM_ENV ${OPTARG%%=*}"
+    DRAM_ENV="$DRAM_ENV ${OPTARG%%=*}"
+    export DRAM_ENV="${DRAM_ENV# }"
   ;;
   f) export DRAM_FAIL_FAST=1 ;;
   i) export DRAM_UPDATE=ask ;;
@@ -94,4 +95,4 @@ while getopts :hVDEI:TUe:fij:s:t:uv opt "$@"; do
 done; shift $(expr $OPTIND - 1)
 
 test $# -gt 0 || usage 1
-exec ${0%/*}/dram.bin "$@"
+exec ${DRAM_BIN-${0%/*}/dram.bin} "$@"

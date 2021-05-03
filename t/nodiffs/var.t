@@ -1,5 +1,5 @@
-`DRAM_NODIFFS=[1Yy] dram` inhibits printing of diffs
-====================================================
+`DRAM_NODIFFS=[1Yy]` inhibits printing of diffs
+===============================================
 
 
 setup::

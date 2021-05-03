@@ -1,5 +1,5 @@
-`DRAM_TEST_SUFFIX=.foo dram` runs `*.foo` files
-===============================================
+`DRAM_TEST_SUFFIX=.foo` runs `*.foo` files
+==========================================
 
 
 setup::

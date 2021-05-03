@@ -1,0 +1,7 @@
+cat > "$TMPDIR/snafubar" <<\EOF
+#!/bin/sh
+env | grep '^DRAM_' | grep -v '^DRAM_BIN=' | sort
+EOF
+
+chmod +x "$TMPDIR/snafubar"
+export DRAM_BIN="$TMPDIR/snafubar"

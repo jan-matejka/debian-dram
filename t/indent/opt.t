@@ -1,37 +1,19 @@
-`dram -I X` behavior
-====================
+`dram -I X` sets `DRAM_INDENT` to `X` spaces
+============================================
 
 setup::
 
-  $ cat > testfile <<\EOF
-  >   $ not-a-test
-  >   > not-an-output
-  >   [0] not an exit code
-  >     $ echo hello
-  >     goodbye
-  >     [1]
-  >       $ not-a-test
-  >       > not-an-output
-  >       [0] not an exit code
+  $ cat > "$TMPDIR/snafubar" <<\EOF
+  > #!/bin/sh
+  > env | grep '^DRAM_' | grep -ve '^DRAM_BIN=' -e '^DRAM_INDENT=' | sort
+  > echo DRAM_INDENT="'$DRAM_INDENT'"
   > EOF
+
+  $ chmod +x "$TMPDIR/snafubar"
+  $ export DRAM_BIN="$TMPDIR/snafubar"
 
 
 test::
 
   $ dram -I 4 testfile
-  !
-  --- testfile
-  +++ testfile
-  @@ -2,8 +2,7 @@
-     > not-an-output
-     [0] not an exit code
-       $ echo hello
-  -    goodbye
-  -    [1]
-  +    hello
-         $ not-a-test
-         > not-an-output
-         [0] not an exit code
-  
-  # Ran 1 test, 1 failed.
-  [2]
+  DRAM_INDENT='    '

@@ -1,5 +1,5 @@
-`DRAM_INDENT=... dram` behavior
-===============================
+`DRAM_INDENT=...` defines indentation of test code
+==================================================
 
 setup::
 

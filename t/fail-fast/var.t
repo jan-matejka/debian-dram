@@ -1,5 +1,5 @@
-`DRAM_FAIL_FAST=[1Yy] dram` exits after the first failed test
-=============================================================
+`DRAM_FAIL_FAST=[1Yy]` exits after the first failed test
+========================================================
 
 setup::
 
@@ -12,7 +12,19 @@ setup::
 
 test::
 
-  $ dram -Df a b c d e
+  $ DRAM_FAIL_FAST=1 dram -D a b c d e
+  ..!ss
+  
+  # Ran 5 tests, 2 skipped, 1 failed.
+  [2]
+
+  $ DRAM_FAIL_FAST=Y dram -D a b c d e
+  ..!ss
+  
+  # Ran 5 tests, 2 skipped, 1 failed.
+  [2]
+
+  $ DRAM_FAIL_FAST=y dram -D a b c d e
   ..!ss
   
   # Ran 5 tests, 2 skipped, 1 failed.
@@ -21,7 +33,27 @@ test::
 
 test::
 
-  $ DRAM_FAIL_FAST=1 dram -Dfv a b c d e
+  $ DRAM_FAIL_FAST=1 dram -Dv a b c d e
+  . a
+  . b
+  ! c
+  s d
+  s e
+  
+  # Ran 5 tests, 2 skipped, 1 failed.
+  [2]
+
+  $ DRAM_FAIL_FAST=Y dram -Dv a b c d e
+  . a
+  . b
+  ! c
+  s d
+  s e
+  
+  # Ran 5 tests, 2 skipped, 1 failed.
+  [2]
+
+  $ DRAM_FAIL_FAST=y dram -Dv a b c d e
   . a
   . b
   ! c

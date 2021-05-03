@@ -1,5 +1,5 @@
-`DRAM_SHELL=x dram` runs tests through `x`
-==========================================
+`DRAM_SHELL=x` runs tests through `x`
+=====================================
 
 
 setup::
@@ -24,7 +24,7 @@ setup::
 
 test::
 
-  $ dram -s wtf testfile
+  $ DRAM_SHELL=wtf dram testfile
   .
   
   # Ran 1 test.

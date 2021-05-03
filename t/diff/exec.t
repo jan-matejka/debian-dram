@@ -1,5 +1,5 @@
-`DRAM_DIFF=badvalue dram` produces a diagnostic, exits !0
-=========================================================
+`DRAM_DIFF=badvalue dram` produces a diagnostic, exits 8
+========================================================
 
 
 setup::

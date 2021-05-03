@@ -1,5 +1,5 @@
-`dram -e X` passes X into script environ
-========================================
+`DRAM_ENV=X` passes X into script environ
+=========================================
 
 setup::
 

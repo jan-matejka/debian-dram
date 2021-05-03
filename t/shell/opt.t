@@ -1,4 +1,4 @@
-`dram -D` sets `DRAM_NODIFFS=1`
+`dram -s X` sets `DRAM_SHELL=X`
 ===============================
 
 
@@ -9,5 +9,5 @@ setup::
 
 test::
 
-  $ dram -D testfile
-  DRAM_NODIFFS=1
+  $ dram -s wtf .
+  DRAM_SHELL=wtf

@@ -1,19 +1,13 @@
-`dram -t .foo` runs `*.foo` files
-=================================
+`dram -t .foo` sets `DRAM_TEST_SUFFIX=.foo`
+===========================================
 
 
 setup::
 
-  $ for t in a b c; do
-  >   touch $t.foo $t.t
-  > done
+  $ . $TESTROOT/Fake.dram.bin
 
 
 test::
 
-  $ dram -vt .foo .
-  . a.foo
-  . b.foo
-  . c.foo
-  
-  # Ran 3 tests.
+  $ dram -t .foo .
+  DRAM_TEST_SUFFIX=.foo

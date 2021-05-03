@@ -1,49 +1,33 @@
-`dram -e X` passes X into script environ
-========================================
+`dram -e X` adds `X` to `DRAM_ENV`, passes `X` into script environ
+==================================================================
 
 setup::
 
-  $ cat >testfile <<\EOF
-  >   $ env | sort
-  >   COLUMNS=80
-  >   LANG=C
-  >   LC_ALL=C
-  >   LINES=20
-  >   LOL=foo  bar\nbaz
-  >   PATH=* (glob)
-  >   PWD=* (glob)
-  >   ROFL=omg wtf
-  >   TESTDIR=/*/opt.t/work (glob)
-  >   TESTFILE=testfile
-  >   TMPDIR=/*/opt.t/work/testfile/tmp (glob)
-  >   TZ=UTC
+  $ cat > "$TMPDIR/snafubar" <<\EOF
+  > #!/bin/sh
+  > env | grep '^DRAM_' | grep -v '^DRAM_BIN=' | sort
+  > echo "LOL='$LOL'"
+  > echo "ROFL='$ROFL'"
   > EOF
+
+  $ chmod +x "$TMPDIR/snafubar"
+  $ export DRAM_BIN="$TMPDIR/snafubar"
 
 
 test::
 
-  $ export LOL="$(printf "%s" "foo  bar\nbaz")"
-  $ dram -e LOL -e ROFL="omg wtf" testfile
-  .
-  
-  # Ran 1 test.
+  $ export LOL="$(printf "%s\n" "foo  bar" "baz")"
+  $ dram -e LOL -e ROFL="omg wtf" .
+  DRAM_ENV=LOL ROFL
+  LOL='foo  bar
+  baz'
+  ROFL='omg wtf'
 
 
 test::
 
   $ unset LOL
-  $ dram -e LOL -e ROFL="omg wtf" testfile
-  !
-  --- testfile
-  +++ testfile
-  @@ -3,7 +3,6 @@
-     LANG=C
-     LC_ALL=C
-     LINES=20
-  -  LOL=foo  bar\nbaz
-     PATH=* (glob)
-     PWD=* (glob)
-     ROFL=omg wtf
-  
-  # Ran 1 test, 1 failed.
-  [2]
+  $ dram -e LOL -e ROFL="omg wtf" .
+  DRAM_ENV=LOL ROFL
+  LOL=''
+  ROFL='omg wtf'

@@ -1,5 +1,5 @@
-`DRAM_JUNIT_FILE=pathname dram` writes a JUnit report in pathname
-=================================================================
+`DRAM_JUNIT_FILE=pathname` writes a JUnit report in pathname
+============================================================
 
 setup::
 

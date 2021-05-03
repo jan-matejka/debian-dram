@@ -8,7 +8,7 @@ all: dram dram.bin
 
 .PHONY: check
 check: all
-	PATH=$$PWD:$$PATH $(TESTCMD) t
+	PATH=$$PWD:$$PATH $(TESTCMD) -e TESTROOT=$$PWD/t t
 
 .PHONY: install
 install: dram dram.bin
