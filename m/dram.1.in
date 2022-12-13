@@ -246,6 +246,7 @@ $ echo $?
 .Xr diff 1 ,
 .Xr patch 1 ,
 .Xr sh 1 ,
+.Xr dram 5 ,
 .Lk https://bitheap.org/cram .
 .\" }}}
 .

@@ -1,0 +1,155 @@
+.\" vim: tw=72 fdm=marker cms=.\\"\ %s
+.
+.\" FRONT MATTER {{{
+.Dd December 13, 2022
+.Dt DRAM 5
+.Os
+.
+.Sh NAME
+.Nm dram
+.Nd testfile syntax
+.\" FRONT MATTER }}}
+.
+.\" SYNOPSIS {{{
+.Sh SYNOPSIS
+.
+.Bd -literal
+test    = cmdline *input *output [exit]
+cmdline = indent "$" SP text eol
+input   = indent ">" SP text eol
+output  = indent text [suffix] eol
+exit    = indent "[" 1*DIGIT "]" eol
+suffix  = SP "(" matcher ")"
+matcher = "glob" / "re" / "no-eol"
+eol     = CRLF / LF
+.Ed
+.\" SYNOPSIS }}}
+.
+.\" DESCRIPTION {{{
+.Sh DESCRIPTION
+A testfile contains any number of tests interspersed with
+prose.
+.
+The test syntax is designed to mimic interactive shell use
+in a terminal, and the full testfile syntax is compatible
+with
+.Lk https://en.wikipedia.org/wiki/ReStructuredText reStructuredText .
+.
+Output lines ending in
+.Qo Li \ (glob) Qc
+are treated as shell patterns, see
+.Lk https://dlang.org/phobos/std_path.html#globMatch std.path.globMatch
+for details.
+.
+Output lines ending in
+.Qo Li \ (re) Qc
+are treated as regular expressions, see
+.Lk https://dlang.org/phobos/std_regex.html std.regex
+for details.
+.\" DESCRIPTION }}}
+.
+.\" EXAMPLES {{{
+.Sh EXAMPLES
+.Bd -literal
+  $ cat > example.t <<\eEXAMPLE
+  > true(1) has no outputs, exits 0::
+  > 
+  >   $ true
+  > 
+  > false(1) has no outputs, exits 1::
+  > 
+  >   $ false
+  >   [1]
+  > 
+  > outputs precede exit code::
+  > 
+  >   $ (echo fubar; exit 8)
+  >   fubar
+  >   [8]
+  > 
+  > incomplete lines require "(no-eol)"::
+  > 
+  >   $ (printf fubar; exit 8)
+  >   fubar (no-eol)
+  >   [8]
+  > 
+  > multiline commands::
+  > 
+  >   $ echo \e
+  >   > this \e
+  >   > and \e
+  >   > that
+  >   this and that
+  > 
+  >   $ tr '[[:lower:]]' '[[:upper:]]' <<EOF
+  >   > fo0?
+  >   > bar...
+  >   > baz!
+  >   > EOF
+  >   FO0?
+  >   BAR...
+  >   BAZ!
+  > EXAMPLE
+  
+  $ dram example.t
+  .
+  
+  # Ran 1 test.
+.Ed
+.
+Settings for clipboard-based testing:
+.
+.Bd -literal
+# zsh
+export PS2='> ' PS1=$'%(?..[%?]\en)\en$ '
+.Ed
+.
+.Bd -literal
+# bash
+export PS2='> ' PS1='$(x="[$?]\en\en$ "; printf %s "${x#\e\e[0\e\e]\en}")'
+.Ed
+.\" EXAMPLES }}}
+.
+.\" SEE ALSO {{{
+.Sh SEE ALSO
+.Xr dram 1 .
+.\" }}}
+.
+.\" AUTHORS {{{
+.Sh AUTHORS
+.An Roman Neuhauser Aq Mt rn+dram@sigpipe.cz
+.\" AUTHORS }}}
+.
+.\" CAVEATS {{{
+.Sh CAVEATS
+.Nm
+is similar to, but not identical with
+.Xr cram 1 .
+.Pp
+Regular expressions are
+.Em mostly
+compatible,
+see
+.Lk https://dlang.org/phobos/std_regex.html std.regex
+and
+.Lk https://docs.python.org/3/library/re.html Lib/re.py
+for comparison.
+.Pp
+Shell patterns are somewhat different:
+on top of
+.Li *
+and
+.Li \&? ,
+Dram also understands
+.Li [abc] , [!abc] ,
+and
+.Li {foo,bar,baz} .
+Backslashes do not escape metacharacters, use
+.Li [?]
+to match a literal
+.Qq Li \&? ,
+and
+.Li [*]
+to match a literal
+.Qq Li * .
+.\" CAVEATS }}}
