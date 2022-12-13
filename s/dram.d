@@ -70,7 +70,7 @@ int main(string[] argv) // {{{
       .cache
       // print dots, exclamation marks, etc.
       .tee!(r => cfg.report(r))
-      // abort on first fail if given -b
+      // abort on first fail if given -f
       .until!(r => cfg.failFast(r))(No.openRight)
       // force evaluation, need reported results
       // before printing the newline below.
