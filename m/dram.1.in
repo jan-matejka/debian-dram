@@ -1,9 +1,9 @@
 .\" vim: tw=72 fdm=marker cms=.\\"\ %s
 .
 .\" FRONT MATTER {{{
-.Dd Oct 30, 2020
-.Os
+.Dd December 13, 2022
 .Dt DRAM 1
+.Os
 .
 .Sh NAME
 .Nm dram
@@ -34,7 +34,8 @@ runs the script with a modified environment, in an empty
 directory, with standard input redirected from
 .Pa /dev/null ,
 and standard output plus standard error redirected into
-a file.  Individual commands are fenced from each other
+a file.
+Individual commands are fenced from each other
 so their outputs are unambiguously attributable.
 .Pp
 .Nm
@@ -55,7 +56,8 @@ Do not print diffs.
 . It Fl E
 Preserve existing environment variables.
 . It Fl I Ar INDENT
-.No Number of spaces used for test code indentation Pq default: Li 2 .
+Number of spaces used for test code indentation
+. Pq default: Li 2 .
 . It Fl T
 Leave behind working files.
 . It Fl U
@@ -87,9 +89,11 @@ Overrides preceding
 and
 . Fl u .
 . It Fl s Ar SHELL
-.No Shell to use for running tests Pq default: Li sh .
+Shell to use for running tests
+. Pq default: Li sh .
 . It Fl t Ar SUFFIX
-.No Extension of testfiles Pq default: Li .t .
+Extension of testfiles
+. Pq default: Li .t .
 . It Fl u
 Merge actual output into tests.
 Overrides preceding
@@ -108,38 +112,55 @@ Show filenames with test statuses.
 Options take precedence over corresponding environment variables.
 .
 .Bl -tag -width xx
-.It DRAM_DIFF
-. No Program used to generate diffs.  Defaults to Pa diff .
-.It DRAM_ENV
+. It Ev DRAM_DIFF
+Program used to generate diffs.
+Defaults to
+. Pa diff .
+. It Ev DRAM_ENV
 Whitespace-separated list of environment variables to copy from
 .Nm Ns 's
 environment into the environment of each test.
-.It DRAM_FAIL_FAST
-. No If set to any of Qo Li 1Yy Qc , enables Fl f .
-.It DRAM_INDENT
+. It Ev DRAM_FAIL_FAST
+If set to any of
+. Qq Li 1Yy ,
+enables
+. Fl f .
+. It Ev DRAM_INDENT
 String used to indent command, continuation, output, and
 exit code lines.
-.It DRAM_KEEP_ENVIRON
-. No If set to any of Qo Li 1Yy Qc , enables Fl E .
-.It DRAM_KEEP_TMPDIR
-. No If set to any of Qo Li 1Yy Qc , enables Fl T .
-.It DRAM_NODIFFS
-. No If set to any of Qo Li 1Yy Qc , enables Fl D .
-.It DRAM_PATCH
-. No Program used to apply diffs.  Defaults to Pa patch .
-.It DRAM_SHELL
-. No See Fl s .
-.It DRAM_UPDATE
-. No If set to any of Qo Li Aa Qc , enables Fl i .
-. No If set to any of Qo Li 1Yy Qc , enables Fl u .
-. No If unset or set to any other value, enables Fl U .
-.It DRAM_TEST_SUFFIX
-. No See Fl t .
-.It DRAM_TMPDIR
-. No If set, Nm No will create working files in this directory
-. No instead of creating one under Ev TMPDIR .
-.It DRAM_VERBOSE
-. No If set to any of Qo Li 1Yy Qc , enables Fl v .
+. It Ev DRAM_KEEP_ENVIRON
+If set to any of
+. Qo Li 1Yy Qc , enables Fl E .
+. It Ev DRAM_KEEP_TMPDIR
+If set to any of
+. Qo Li 1Yy Qc , enables Fl T .
+. It Ev DRAM_NODIFFS
+If set to any of
+. Qo Li 1Yy Qc , enables Fl D .
+. It Ev DRAM_PATCH
+Program used to apply diffs.
+Defaults to
+. Pa patch .
+. It Ev DRAM_SHELL
+See Fl s .
+. It Ev DRAM_UPDATE
+If set to any of
+. Qo Li Aa Qc , enables Fl i .
+If set to any of
+. Qo Li 1Yy Qc , enables Fl u .
+If unset or set to any other value, enables
+. Fl U .
+. It Ev DRAM_TEST_SUFFIX
+See Fl t .
+. It Ev DRAM_TMPDIR
+If set,
+. Nm
+will create working files in this directory
+instead of creating one under
+. Ev TMPDIR .
+. It Ev DRAM_VERBOSE
+If set to any of
+. Qo Li 1Yy Qc , enables Fl v .
 .El
 .Pp
 Beside the above,
@@ -168,28 +189,27 @@ are
 .Em always
 removed from the environment of tests.
 .
-.Bl -column Variable Value
-.It Ev COLUMNS Ta Qq Li 80
-.It Ev LANG Ta Qq Li C
-.It Ev LC_ALL Ta Qq Li C
-.It Ev LINES Ta Qq Li 20
-.It Ev PATH Ta Inherited from Nm Ns No 's environment, defaults to
-. Qq Li /usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin .
-.It Ev TMPDIR Ta Pathname of an existing, writable, empty directory.
-.It Ev TZ Ta Li UTC
-.El
 .Bl -tag -width xx
-.It Ev TESTDIR
-. No Absolute path of the directory containing the testfile.
-.It Ev TESTFILE
-. No Basename of the testfile.
+. It Ev COLUMNS Ns Li = Ns Qq Li 80
+. It Ev LANG Ns Li = Ns Qq Li C
+. It Ev LC_ALL Ns Li = Ns Qq Li C
+. It Ev LINES Ns Li = Ns Qq Li 20
+. It Ev PATH Ns Li = Ns Qq Li /usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin .
+Inherited from
+. Nm Ns No 's environment if present .
+. It Ev TESTDIR
+Absolute path of the directory containing the testfile.
+. It Ev TESTFILE
+Basename of the testfile.
+. It Ev TMPDIR
+Pathname of an existing, writable, empty directory.
+. It Ev TZ Li UTC
 .El
-.Pp
 .\" }}}
 .
 .\" EXIT STATUS {{{
 .Sh EXIT STATUS
-.Bl -tag
+.Bl -tag -width xx
 .It 0
 Success.
 .It 1
