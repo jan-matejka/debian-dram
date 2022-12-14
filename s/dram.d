@@ -308,6 +308,8 @@ struct DramConfig // {{{
     }
     if (verbose)
       writeln(" ", r.testFile);
+    else
+      stdout.flush();
   } // }}}
   int diffAndPatch(TestResult r) // {{{
   {
