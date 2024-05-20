@@ -1,0 +1,210 @@
+From: Roman Neuhauser <rn@sigpipe.cz>
+Date: Tue, 13 Dec 2022 11:05:23 +0100
+Subject: m/dram.5.in
+
+---
+ GNUmakefile |   3 ++
+ m/dram.1.in |   1 +
+ m/dram.5.in | 155 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 159 insertions(+)
+ create mode 100644 m/dram.5.in
+
+diff --git a/GNUmakefile b/GNUmakefile
+index 64434ca..e40d910 100644
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -2,6 +2,7 @@ prefix = /usr/local
+ bindir = $(prefix)/bin
+ mandir = $(prefix)/share/man
+ man1dir = $(mandir)/man1
++man5dir = $(mandir)/man1
+ 
+ TESTCMD ?= $$PWD/dram
+ 
+@@ -17,11 +18,13 @@ install: dram dram.bin | installdirs
+ 	install -m 755 dram $(DESTDIR)$(bindir)/dram
+ 	install -s -m 755 dram.bin $(DESTDIR)$(bindir)/dram.bin
+ 	install -m 644 m/dram.1.in $(DESTDIR)$(man1dir)/dram.1
++	install -m 644 m/dram.5.in $(DESTDIR)$(man5dir)/dram.5
+ 
+ .PHONY: installdirs
+ installdirs:
+ 	install -m 755 -d $(DESTDIR)$(bindir)
+ 	install -m 755 -d $(DESTDIR)$(man1dir)
++	install -m 755 -d $(DESTDIR)$(man5dir)
+ 
+ .PHONY: clean
+ clean:
+diff --git a/m/dram.1.in b/m/dram.1.in
+index 18906bc..cc0a91a 100644
+--- a/m/dram.1.in
++++ b/m/dram.1.in
+@@ -246,6 +246,7 @@ $ echo $?
+ .Xr diff 1 ,
+ .Xr patch 1 ,
+ .Xr sh 1 ,
++.Xr dram 5 ,
+ .Lk https://bitheap.org/cram .
+ .\" }}}
+ .
+diff --git a/m/dram.5.in b/m/dram.5.in
+new file mode 100644
+index 0000000..d3fd743
+--- /dev/null
++++ b/m/dram.5.in
+@@ -0,0 +1,155 @@
++.\" vim: tw=72 fdm=marker cms=.\\"\ %s
++.
++.\" FRONT MATTER {{{
++.Dd December 13, 2022
++.Dt DRAM 5
++.Os
++.
++.Sh NAME
++.Nm dram
++.Nd testfile syntax
++.\" FRONT MATTER }}}
++.
++.\" SYNOPSIS {{{
++.Sh SYNOPSIS
++.
++.Bd -literal
++test    = cmdline *input *output [exit]
++cmdline = indent "$" SP text eol
++input   = indent ">" SP text eol
++output  = indent text [suffix] eol
++exit    = indent "[" 1*DIGIT "]" eol
++suffix  = SP "(" matcher ")"
++matcher = "glob" / "re" / "no-eol"
++eol     = CRLF / LF
++.Ed
++.\" SYNOPSIS }}}
++.
++.\" DESCRIPTION {{{
++.Sh DESCRIPTION
++A testfile contains any number of tests interspersed with
++prose.
++.
++The test syntax is designed to mimic interactive shell use
++in a terminal, and the full testfile syntax is compatible
++with
++.Lk https://en.wikipedia.org/wiki/ReStructuredText reStructuredText .
++.
++Output lines ending in
++.Qo Li \ (glob) Qc
++are treated as shell patterns, see
++.Lk https://dlang.org/phobos/std_path.html#globMatch std.path.globMatch
++for details.
++.
++Output lines ending in
++.Qo Li \ (re) Qc
++are treated as regular expressions, see
++.Lk https://dlang.org/phobos/std_regex.html std.regex
++for details.
++.\" DESCRIPTION }}}
++.
++.\" EXAMPLES {{{
++.Sh EXAMPLES
++.Bd -literal
++  $ cat > example.t <<\eEXAMPLE
++  > true(1) has no outputs, exits 0::
++  > 
++  >   $ true
++  > 
++  > false(1) has no outputs, exits 1::
++  > 
++  >   $ false
++  >   [1]
++  > 
++  > outputs precede exit code::
++  > 
++  >   $ (echo fubar; exit 8)
++  >   fubar
++  >   [8]
++  > 
++  > incomplete lines require "(no-eol)"::
++  > 
++  >   $ (printf fubar; exit 8)
++  >   fubar (no-eol)
++  >   [8]
++  > 
++  > multiline commands::
++  > 
++  >   $ echo \e
++  >   > this \e
++  >   > and \e
++  >   > that
++  >   this and that
++  > 
++  >   $ tr '[[:lower:]]' '[[:upper:]]' <<EOF
++  >   > fo0?
++  >   > bar...
++  >   > baz!
++  >   > EOF
++  >   FO0?
++  >   BAR...
++  >   BAZ!
++  > EXAMPLE
++  
++  $ dram example.t
++  .
++  
++  # Ran 1 test.
++.Ed
++.
++Settings for clipboard-based testing:
++.
++.Bd -literal
++# zsh
++export PS2='> ' PS1=$'%(?..[%?]\en)\en$ '
++.Ed
++.
++.Bd -literal
++# bash
++export PS2='> ' PS1='$(x="[$?]\en\en$ "; printf %s "${x#\e\e[0\e\e]\en}")'
++.Ed
++.\" EXAMPLES }}}
++.
++.\" SEE ALSO {{{
++.Sh SEE ALSO
++.Xr dram 1 .
++.\" }}}
++.
++.\" AUTHORS {{{
++.Sh AUTHORS
++.An Roman Neuhauser Aq Mt rn+dram@sigpipe.cz
++.\" AUTHORS }}}
++.
++.\" CAVEATS {{{
++.Sh CAVEATS
++.Nm
++is similar to, but not identical with
++.Xr cram 1 .
++.Pp
++Regular expressions are
++.Em mostly
++compatible,
++see
++.Lk https://dlang.org/phobos/std_regex.html std.regex
++and
++.Lk https://docs.python.org/3/library/re.html Lib/re.py
++for comparison.
++.Pp
++Shell patterns are somewhat different:
++on top of
++.Li *
++and
++.Li \&? ,
++Dram also understands
++.Li [abc] , [!abc] ,
++and
++.Li {foo,bar,baz} .
++Backslashes do not escape metacharacters, use
++.Li [?]
++to match a literal
++.Qq Li \&? ,
++and
++.Li [*]
++to match a literal
++.Qq Li * .
++.\" CAVEATS }}}

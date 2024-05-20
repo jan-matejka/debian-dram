@@ -1,0 +1,22 @@
+From: Roman Neuhauser <rn@sigpipe.cz>
+Date: Tue, 13 Dec 2022 05:50:05 +0100
+Subject: s/dram.d: correct a comment
+
+fail-fast is enabled by -f, not -b.
+---
+ s/dram.d | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/s/dram.d b/s/dram.d
+index 8e12d7e..b95c3e7 100644
+--- a/s/dram.d
++++ b/s/dram.d
+@@ -70,7 +70,7 @@ int main(string[] argv) // {{{
+       .cache
+       // print dots, exclamation marks, etc.
+       .tee!(r => cfg.report(r))
+-      // abort on first fail if given -b
++      // abort on first fail if given -f
+       .until!(r => cfg.failFast(r))(No.openRight)
+       // force evaluation, need reported results
+       // before printing the newline below.

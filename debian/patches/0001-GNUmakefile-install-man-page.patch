@@ -1,0 +1,39 @@
+From: Roman Neuhauser <rn@sigpipe.cz>
+Date: Tue, 13 Dec 2022 01:17:56 +0100
+Subject: GNUmakefile: install man page
+
+... also ensure `make install` works even if $(DESTDIR) is empty
+or nonexistent.
+---
+ GNUmakefile | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/GNUmakefile b/GNUmakefile
+index 9936d5b..64434ca 100644
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -1,5 +1,7 @@
+ prefix = /usr/local
+ bindir = $(prefix)/bin
++mandir = $(prefix)/share/man
++man1dir = $(mandir)/man1
+ 
+ TESTCMD ?= $$PWD/dram
+ 
+@@ -11,9 +13,15 @@ check: all
+ 	PATH=$$PWD:$$PATH $(TESTCMD) -e TESTROOT=$$PWD/t t
+ 
+ .PHONY: install
+-install: dram dram.bin
++install: dram dram.bin | installdirs
+ 	install -m 755 dram $(DESTDIR)$(bindir)/dram
+ 	install -s -m 755 dram.bin $(DESTDIR)$(bindir)/dram.bin
++	install -m 644 m/dram.1.in $(DESTDIR)$(man1dir)/dram.1
++
++.PHONY: installdirs
++installdirs:
++	install -m 755 -d $(DESTDIR)$(bindir)
++	install -m 755 -d $(DESTDIR)$(man1dir)
+ 
+ .PHONY: clean
+ clean:

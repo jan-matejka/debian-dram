@@ -1,0 +1,23 @@
+From: =?utf-8?q?Jan_Mat=C4=9Bjka?= <jan@matejka.ninja>
+Date: Tue, 21 May 2024 03:44:22 +0200
+Subject: make: add syscheck
+
+---
+ GNUmakefile | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/GNUmakefile b/GNUmakefile
+index ce5a4fc..7694603 100644
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -13,6 +13,10 @@ all: dram dram.bin
+ check: all
+ 	PATH=$$PWD:$$PATH $(TESTCMD) -e TESTROOT=$$PWD/t t
+ 
++.PHONY: syscheck
++syscheck:
++	dram -e TESTROOT=$$PWD/t t
++
+ .PHONY: install
+ install: dram dram.bin | installdirs
+ 	install -m 755 dram $(DESTDIR)$(bindir)/dram

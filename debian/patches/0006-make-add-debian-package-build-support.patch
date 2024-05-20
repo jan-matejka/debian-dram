@@ -1,0 +1,23 @@
+From: =?utf-8?q?Jan_Mat=C4=9Bjka?= <jan@matejka.ninja>
+Date: Mon, 20 May 2024 12:25:05 +0200
+Subject: make: add debian package build support
+
+---
+ GNUmakefile | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/GNUmakefile b/GNUmakefile
+index 6224cf4..ce5a4fc 100644
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -35,3 +35,10 @@ dram: s/dram.sh
+ 
+ dram.bin: s/dram.d s/mdiff.d
+ 	dub build
++
++.PHONY: debian
++debian:
++
++	# https://honk.sigxcpu.org/projects/git-buildpackage/manual-html/gbp.import.upstream-git.html
++	gbp buildpackage --git-pristine-tar --git-pristine-tar-commit \
++		--git-upstream-tag='v%(version)s' --git-debian-branch=debian

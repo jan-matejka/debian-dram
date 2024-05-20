@@ -1,0 +1,18 @@
+From: =?utf-8?q?Jan_Mat=C4=9Bjka?= <jan@matejka.ninja>
+Date: Mon, 20 May 2024 13:24:22 +0200
+Subject: make: allow prefix override from environment
+
+---
+ GNUmakefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/GNUmakefile b/GNUmakefile
+index e40d910..6224cf4 100644
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -1,4 +1,4 @@
+-prefix = /usr/local
++prefix ?= /usr/local
+ bindir = $(prefix)/bin
+ mandir = $(prefix)/share/man
+ man1dir = $(mandir)/man1
