@@ -1,4 +1,4 @@
-prefix = /usr/local
+prefix ?= /usr/local
 bindir = $(prefix)/bin
 mandir = $(prefix)/share/man
 man1dir = $(mandir)/man1
