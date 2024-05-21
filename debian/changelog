@@ -1,5 +1,8 @@
-dram (0.8-1) UNRELEASED; urgency=medium
+dram (0.8-1) unstable; urgency=medium
 
+  [ Jan Matějka ]
   * Initial release.
+  * debian: gbp pq export
+  * debian: add gbp.conf
 
- -- Jan Matějka <jan@matejka.ninja>  Mon, 20 May 2024 08:29:57 +0200
+ -- Jan Matějka <jan@matejka.ninja>  Tue, 21 May 2024 04:26:12 +0200
