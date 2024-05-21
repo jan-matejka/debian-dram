@@ -13,6 +13,10 @@ all: dram dram.bin
 check: all
 	PATH=$$PWD:$$PATH $(TESTCMD) -e TESTROOT=$$PWD/t t
 
+.PHONY: syscheck
+syscheck:
+	dram -e TESTROOT=$$PWD/t t
+
 .PHONY: install
 install: dram dram.bin | installdirs
 	install -m 755 dram $(DESTDIR)$(bindir)/dram
