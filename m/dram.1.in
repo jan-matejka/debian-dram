@@ -142,7 +142,8 @@ Program used to apply diffs.
 Defaults to
 . Pa patch .
 . It Ev DRAM_SHELL
-See Fl s .
+See
+. Fl s .
 . It Ev DRAM_UPDATE
 If set to any of
 . Qo Li Aa Qc , enables Fl i .
@@ -151,7 +152,8 @@ If set to any of
 If unset or set to any other value, enables
 . Fl U .
 . It Ev DRAM_TEST_SUFFIX
-See Fl t .
+See
+. Fl t .
 . It Ev DRAM_TMPDIR
 If set,
 . Nm
