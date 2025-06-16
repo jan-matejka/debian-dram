@@ -736,7 +736,7 @@ int runDiff(DramConfig cfg, string test, string result, File sink) // {{{
   , Config.retainStdout
   ).wait;
   if (ex > 1)
-    throw new ToolFailure(escapeShellCommand(argv));
+    throw new ToolFailure(argv);
   return ex;
 } // }}}
 
@@ -745,14 +745,18 @@ int runPatch(DramConfig cfg, string test, string patch) // {{{
   auto argv = [cfg.patchcmd, "-s", test, patch];
   auto ex = spawnProcess(argv).wait;
   if (ex)
-    throw new ToolFailure(escapeShellCommand(argv));
+    throw new ToolFailure(argv);
   return ex;
 } // }}}
 
 class ToolFailure : Exception
 {
-  this(string msg, string file = __FILE__, size_t line = __LINE__)
+  this(string [] argv, string file = __FILE__, size_t line = __LINE__)
   {
-    super(msg, file, line);
+    super(argv.map!(quote).join(" "), file, line);
+  }
+  static auto quote(string s)
+  {
+    return "'" ~ s.replace("'", "'\\''") ~ "'";
   }
 }
