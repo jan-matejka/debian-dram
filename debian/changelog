@@ -1,3 +1,20 @@
+dram (0.10-1) stable; urgency=medium
+
+  [ Roman Neuhauser ]
+  * GNUmakefile: install man page
+  * m/dram.1.in: syntax fixes and changes
+  * s/dram.d: correct a comment
+  * m/dram.5.in
+  * flush stdout after each test status in default mode
+  * manpage fixes
+  * dram.d: replace escapeShellCommand with custom code
+
+  [ Jan Matějka ]
+  * debian: build for trixie
+  * debian/patches: gbp pq export
+
+ -- Jan Matějka <jan@matejka.ninja>  Thu, 04 Sep 2025 11:17:15 +0200
+
 dram (0.8-1) unstable; urgency=medium
 
   [ Jan Matějka ]
