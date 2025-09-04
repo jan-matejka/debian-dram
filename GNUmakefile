@@ -2,7 +2,7 @@ prefix ?= /usr/local
 bindir = $(prefix)/bin
 mandir = $(prefix)/share/man
 man1dir = $(mandir)/man1
-man5dir = $(mandir)/man1
+man5dir = $(mandir)/man5
 
 TESTCMD ?= $$PWD/dram
 
