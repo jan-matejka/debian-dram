@@ -1,7 +1,3 @@
-0001-GNUmakefile-install-man-page.patch
-0002-m-dram.1.in-syntax-fixes-and-changes.patch
-0003-s-dram.d-correct-a-comment.patch
-0004-m-dram.5.in.patch
-0005-make-allow-prefix-override-from-environment.patch
-0006-make-add-debian-package-build-support.patch
-0007-make-add-syscheck.patch
+0001-make-allow-prefix-override-from-environment.patch
+0002-make-add-syscheck-runs-checked-out-testsuite-against.patch
+0003-build-fix-man5dir.patch

@@ -1,0 +1,21 @@
+From: =?utf-8?q?Jan_Mat=C4=9Bjka?= <jan@matejka.ninja>
+Date: Thu, 4 Sep 2025 11:41:58 +0200
+Subject: build: fix man5dir
+
+---
+ GNUmakefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/GNUmakefile b/GNUmakefile
+index 08c13f8..dddaa6e 100644
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -2,7 +2,7 @@ prefix ?= /usr/local
+ bindir = $(prefix)/bin
+ mandir = $(prefix)/share/man
+ man1dir = $(mandir)/man1
+-man5dir = $(mandir)/man1
++man5dir = $(mandir)/man5
+ 
+ TESTCMD ?= $$PWD/dram
+ 
